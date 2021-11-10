@@ -1,0 +1,286 @@
+{% extends 'base.html' %}
+
+
+{% block css_style %}
+<link href="{{ url_for('static', filename='css/settings.css')}}" rel="stylesheet">
+{% endblock %}
+
+
+{% block content %}
+
+{% for cat, msg in get_flashed_messages(True) %}
+    <!-- <div class="flash {{cat}}">{{msg}}</div> -->
+
+    <div id="toastDiv" class="position-fixed top-30 start-50 translate-middle-x p-3" style="z-index: 12">
+      <div id="infoToast" class="toast hide text-white {{cat}} border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <strong class="me-auto">Информация</strong>
+          <!-- <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button> -->
+        </div>
+        <div class="toast-body">
+          {{msg}}
+        </div>
+      </div>
+    </div>
+{% endfor %}
+
+
+
+
+<div class="container light-style flex-grow-1 container-p-y mb-5" style="margin-left: 0px; max-width: 100%;">
+
+  <h2 class="font-weight-bold py-3 mb-4">
+    Настройки аккаунта
+  </h2>
+
+  <div class="card overflow-hidden shadow-sm rounded-3">
+
+
+    <div class="row no-gutters row-bordered row-border-light">
+      <div class="col-md-3 pt-0">
+        <div class="list-group list-group-flush account-settings-links rounded-3">
+          <a class="list-group-item list-group-item-action setting-name border border-dark active" data-bs-toggle="list" href="#account-general">Основные</a>
+          <a class="list-group-item list-group-item-action border border-dark setting-name" data-bs-toggle="list" href="#account-change-password">Смена пароля</a>
+          <a class="list-group-item list-group-item-action border border-dark setting-name" data-bs-toggle="list" href="#account-info">Информация</a>
+        </div>
+      </div>
+
+
+      <div class="col-md-9">
+        <div class="tab-content">
+          
+          
+          <div class="tab-pane fade active show" id="account-general">
+
+            <div class="card-body media align-items-center">
+              <div class="d-flex flex-row">
+                <img src="{{ url_for('profiles.load_avatar') }}" alt="" class="d-block ui-w-80">
+                
+                <div class="media-body" style="margin-left: 10px;">
+                  <form action="{{ url_for('settings.upload') }}" method="POST" enctype="multipart/form-data">
+                    <label class="btn btn-secondary btn-sm mt-4">
+                      Выбрать новую фотографию
+                      <input type="file" name="file" class="account-settings-fileinput">
+                    </label> &nbsp;
+                    <input type="button" class="btn btn-primary btn-sm mt-4" data-bs-toggle="modal" data-bs-target="#changeConfirmModal" value="Загрузить">
+       
+                     <!-- Модальное окно подтверждения -->
+                     <div class="modal fade" id="changeConfirmModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Подтвердите действие</h5>
+                          </div>
+                          <div class="modal-body">
+                              Сохранить изменения?
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                            <button type="submit" class="btn btn-primary">Сохранить</button>
+                          </div>
+                        </div>
+                      </div>
+                     </div>
+                  </form> 
+                </div>
+
+              </div>
+              <div class="text-light small mt-1">Допустимы JPG, PNG. Максимальный размер 1MB</div>
+            </div>
+            <hr class="border-light m-0">
+
+            <div class="card-body">
+
+
+              <form action="{{ url_for('settings.upload_basic_info') }}" method="POST" enctype="multipart/form-data">
+                
+                <div class="form-group">
+                  <label class="form-label">Имя</label>
+                  <input type="text" name="first_name" class="form-control mb-1" value="{{ first_name }}">
+                </div>
+  
+                <div class="form-group">
+                  <label class="form-label">Фамилия</label>
+                  <input type="text" name="second_name" class="form-control" value="{{ second_name }}">
+                </div>
+  
+                <div class="form-group">
+                  <label class="form-label">Телефон</label>
+                  <input type="text" name="phone" class="form-control" value="{{ phone }}">
+                </div>
+  
+                <div class="form-group">
+                  <label class="form-label">E-mail</label>
+                  <input type="text" name="email" class="form-control mb-1" value="{{ email }}">
+                  <div class="alert alert-warning mt-3 {{ hidden }}" >
+                    Ваш адрес не подтвержден, чтобы пользоваться сайтом, перейдите по ссылке, отправленной в электронном письме<br>
+                    <a href="{{ url_for('confirmEmail.send_confirm') }}">Повторить отправку</a>
+                  </div>
+                  <input type="button" class="btn btn-primary btn-sm mt-3" data-bs-toggle="modal" data-bs-target="#changeBasicsModal" value="Сохранить изменения">
+                </div>
+  
+                <!-- Модальное окно подтверждения -->
+                <div class="modal fade" id="changeBasicsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Подтвердите действие</h5>
+                    </div>
+                    <div class="modal-body">
+                        Сохранить изменения?
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                      <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </div>
+                  </div>
+                </div>
+                </div>
+  
+              </form>
+
+
+            </div>
+
+          </div>
+          
+
+          <div class="tab-pane fade" id="account-change-password">
+            <div class="card-body pb-2">
+
+
+
+
+
+              <form action="{{ url_for('settings.upload_new_password') }}" method="POST" enctype="multipart/form-data">
+
+                <div class="form-group">
+                  <label class="form-label">Текущий пароль</label>
+                  <input type="password" name = "old_psw" class="form-control">
+                </div>
+  
+                <div class="form-group">
+                  <label class="form-label">Новый пароль</label>
+                  <input type="password" name = "new_psw" class="form-control">
+                </div>
+                <input type="button" class="btn btn-primary btn-sm mt-3 mb-4" data-bs-toggle="modal" data-bs-target="#changeDescriptionModal" value="Сохранить изменения">
+   
+                <!-- Модальное окно подтверждения -->
+                <div class="modal fade" id="changeDescriptionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                   <div class="modal-dialog modal-dialog-centered">
+                     <div class="modal-content">
+                       <div class="modal-header">
+                         <h5 class="modal-title" id="exampleModalLabel">Подтвердите действие</h5>
+                       </div>
+                       <div class="modal-body">
+                           Сохранить изменения?
+                       </div>
+                       <div class="modal-footer">
+                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                         <button type="submit" class="btn btn-primary">Сохранить</button>
+                       </div>
+                     </div>
+                   </div>
+                 </div>
+              </form> 
+
+
+
+
+            </div>
+          </div>
+
+
+          <div class="tab-pane fade" id="account-info">
+            
+            <div class="card-body pb-2">
+              <h6 class="mb-4">Общая</h6>
+
+              <form action="{{ url_for('settings.upload_desc') }}" method="POST" class="form-outline" enctype="multipart/form-data">
+                <div class="form-group">
+                  <label class="form-label">Описание</label>
+                  <textarea name="desc" class="form-control" id="descArea" rows="5">{% if description %}{{ description }}{% endif %}</textarea>
+                </div>
+                <!-- <input type="button" class="btn btn-primary btn-sm mt-3 mb-4" data-bs-toggle="modal" data-bs-target="#changeDescriptionModal" value="Сохранить"> -->
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+                <!-- Модальное окно подтверждения
+                <div class="modal fade" id="changeDescriptionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                   <div class="modal-dialog modal-dialog-centered">
+                     <div class="modal-content">
+                       <div class="modal-header">
+                         <h5 class="modal-title" id="exampleModalLabel">Подтвердите действие</h5>
+                       </div>
+                       <div class="modal-body">
+                           Сохранить изменения?
+                       </div>
+                       <div class="modal-footer">
+                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                         <button type="submit" class="btn btn-primary">Сохранить</button>
+                       </div>
+                     </div>
+                   </div>
+                 </div> -->
+              </form> 
+
+            </div>
+            
+            <hr class="border-light m-0">
+
+            <div class="card-body pb-2">
+              <h6 class="mb-4">Геолокация</h6>
+              <div class="address_change">
+                <form action="{{ url_for('settings.address_confirm') }}" method="POST" class="form-outline" enctype="multipart/form-data">
+                  <div class="form-group">
+                    <label class="form-label">Домашний адрес</label>
+                    <textarea name="place" class="form-control" id="placeArea" rows="1">{% if address %}{{ address }}{% endif %}</textarea>
+                  </div>       
+                  <input type="submit" class="btn btn-primary btn-primary btn-sm mt-3 mb-4" value="Изменить">
+                </form> 
+              </div>
+            </div>
+    
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+
+
+{% endblock %}
+
+{% block script %}
+    <!-- Блок скрипта для выделения иконки в меню -->
+    <script>    
+        var link = document.getElementById("settings_link")
+        link.classList.add("nav__link--active")
+    </script>
+
+    <!-- Тост -->
+    <script>
+      var option = {
+        animation: true,
+        delay: 3000
+      }
+      function showToast() {
+        let toastAlert = document.getElementById("infoToast")
+        let bsAlert = new bootstrap.Toast(toastAlert, option)
+        bsAlert.show()
+      }
+      window.onload = showToast()
+    </script>
+
+    <script>
+      // При большом экране изменим раположени тоста
+      if (window.innerWidth >= 767) {
+        var toastCont = document.getElementById("toastDiv")
+        toastCont.classList.remove("start-50", "translate-middle-x")
+        toastCont.classList.add("end-0")
+      }
+    </script>
+{% endblock %}

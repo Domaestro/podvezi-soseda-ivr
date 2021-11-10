@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block css_style %}
+<link href="{{ url_for('static', filename='css/profile.css')}}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <div class = "ava-desc">
+            <div class="avatar-block">
+                <img src="{{ url_for('profiles.load_avatar') }}" id = "avatar" class="img-thumbnail rounded" />
+                <h2>{{ name }}</h2>
+            </div>
+            <div class="description">
+                <span id="Description" class = "infType">Описание: </span>
+                <p id="Description-text">
+                    {% if not description %}
+                    <a href="{{ url_for('settings.settings') }}" class="btn btn-secondary">Добавьте</a>
+                    {% else %}
+                        {{ description }}
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+        <div class="info-block">
+            <div class="block-with-btn">
+                <p><span class = "infType">id: </span>{{ id }}</p>
+                <span id = "settings-btn"><a href="{{ url_for('settings.settings') }}"><i class="material-icons nav__icon">settings</i></a></span>
+            </div>
+            <p><span class = "infType">Email: </span>{{ email }}</p>
+            <p><span class = "infType">Телефон: </span>{{ phone }}</p>
+            <p><span class = "infType">Подтвержден: </span>{{ confirmed }}</p>
+            <p><span class = "infType">Домашний адрес: </span>
+                {% if not address %}
+                    <a href="{{ url_for('settings.settings') }}" class="btn btn-link">Добавьте</a>
+                {% else %}
+                    {{ address }}
+                {% endif %}
+            </p>
+        </div>
+        <span id = "logout-btn"><a href="{{ url_for('auth.logout') }}" class="btn btn-light">Выйти из профиля</a></span>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <!-- Блок скрипта для выделения иконки в меню -->
+    <script>    
+        var link = document.getElementById("profile_link");
+        link.classList.add("nav__link--active");
+    </script>
+{% endblock %}

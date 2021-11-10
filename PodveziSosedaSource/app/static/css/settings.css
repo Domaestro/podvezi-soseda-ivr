@@ -1,0 +1,51 @@
+.success {
+    background-color: rgb(56, 167, 56);
+}
+
+.error {
+    background-color: rgb(204, 59, 59);
+}
+
+.ui-w-80 {
+    width: 80px !important;
+    height: auto;
+}
+
+.setting-name {
+  color: white;
+  background-color: rgb(70, 130, 219);
+}
+.setting-name:hover {
+  color:rgb(214, 214, 214);
+  background-color: rgb(62, 125, 219);
+  transition: all 0.2s ease-out;
+}
+
+label.btn {
+    margin-bottom: 0;
+}
+
+.btn {
+    cursor: pointer;
+}
+
+.text-light {
+    color: #babbbc !important;
+}
+
+.account-settings-fileinput {
+    position: absolute;
+    visibility: hidden;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+
+.account-settings-links .list-group-item.active {
+    font-weight: bold !important;
+}
+
+/* На большом экране*/
+@media (min-width: 767px) {
+
+}

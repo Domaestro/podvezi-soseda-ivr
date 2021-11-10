@@ -1,0 +1,41 @@
+import os
+
+class Config(object):
+    # Определяет, включен ли режим отладки
+    DEBUG = False
+
+    # Включение защиты против "Cross-site Request Forgery (CSRF)"
+    CSRF_ENABLED = True
+
+    # Случайный ключ, которые будет исползоваться для подписи
+    # данных, например cookies.
+    SECRET_KEY = os.urandom(12)
+
+    # Настройки базы данных
+    SQLALCHEMY_DATABASE_URI = os.environ["DATABASE_URI"]
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_ENGINE_OPTIONS = {"pool_pre_ping": True}  
+
+    # Максимальный объем передаваемых файлов
+    MAX_CONTENT_LENGTH = 2048*2048
+
+    # Директория static файлов
+    #STATICFILES_DIRS = (os.path.join(os.path.abspath(os.path.dirname(__file__)), "Static"))
+
+
+    # Настройки для отправки писем подтверждения
+    domain = "http://127.0.0.1:5000"
+    email_login = os.environ["EMAIL_LOGIN"]
+    email_password = os.environ["EMAIL_PASSWORD"]
+
+    # API ключ к Google Maps
+    api_key = os.environ["GOOGLE_MAPS_API_KEY"]
+
+
+class ProductionConfig(Config):
+    DEBUG = False
+
+
+class DevelopmentConfig(Config):
+    DEVELOPMENT = True
+    DEBUG = True

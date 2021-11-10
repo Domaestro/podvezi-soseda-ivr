@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> <!--Гугл шрифт-иконки-->
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css')}}" rel="stylesheet"> <!--Bootstrap-->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='imgs/favicon.ico') }}"> <!--Иконка-->
+    <link href="{{ url_for('static', filename='css/base.css')}}" rel="stylesheet">
+    {% block css_style %}
+    {% endblock %}
+    <title>{{ title }}</title>
+  </head>
+  <body>
+        <header class="site-header">
+            <div class="site-identity">
+                <a><img src="{{ url_for('static', filename='imgs/logo.png')}}" /></a>
+                <h1><a id="text_logo">Подвези соседа!</a></h1>
+            </div>
+        </header>
+        
+        <nav class="nav">
+            <a href="/drive" id = "drive_link" class="nav__link" data-bs-toggle="tooltip" data-bs-placement="right" title="Подвезти">
+              <div class="nav__cont">
+                <i class="material-icons nav__icon">directions_car</i>
+                <span class="nav__text">Подвезти</span>
+              </div>
+            </a>
+            <a href="/join" id = "join_link" class="nav__link" data-bs-toggle="tooltip" data-bs-placement="right" title="Поехать">
+              <div class="nav__cont">
+                    <i class="material-icons nav__icon">hail</i>
+                <span class="nav__text">Поехать</span>
+              </div>
+            </a>
+            <a href="/profile" id = "profile_link" class="nav__link" data-bs-toggle="tooltip" data-bs-placement="right" title="Профиль">
+              <div class="nav__cont">
+                   <i class="material-icons nav__icon">person</i>
+                  <span class="nav__text">Профиль</span>
+              </div>
+            </a>
+            <a href="/settings" id = "settings_link" class="nav__link" data-bs-toggle="tooltip" data-bs-placement="right" title="Настройки">
+              <div class="nav__cont">
+                <i class="material-icons nav__icon">settings</i>
+                <span class="nav__text">Настройки</span>
+              </div>
+            </a>
+          </nav>
+
+        <main>
+            {% block content %}
+            {% endblock %}
+        </main>
+
+        <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js')}}"></script>
+        <script>
+          if (window.screen.width >= 767) {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) { 
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+            })
+          }
+        </script>
+
+        {% block script %}
+        {% endblock %}
+  </body>
+</html>

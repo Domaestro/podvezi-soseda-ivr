@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Регистрация</title>
+
+
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css')}}" rel="stylesheet"> <!--Bootstrap-->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='imgs/favicon.ico') }}"> <!--Иконка-->
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+    <link href="{{ url_for('static', filename='css/login.css')}}" rel="stylesheet">
+
+  </head>
+  <body class="text-center">
+    <main class="form-sign" >
+        <form action="{{ url_for('.register') }}" method="post" class="form-contact">
+            <img class="mb-4" src="{{ url_for('static', filename='imgs/logo.png')}}" alt="" width="72" height="57">
+            <h1 class="h3 mb-3 fw-normal">Регистрация</h1>
+
+            {% for cat, msg in get_flashed_messages(True) %}
+            <div class="flash {{cat}}">{{msg}}</div>
+            {% endfor %}
+
+            <div class="form-floating">
+            <input type="text" class="form-control" id="floatingName" name="first_name" placeholder="name@example.com">
+            <label for="floatingInput">Имя</label>
+            </div>
+            <div class="form-floating">
+            <input type="text" class="form-control" id="floatingSurname" name="second_name" placeholder="name@example.com">
+            <label for="floatingInput">Фамилия</label>
+            </div>
+            <div class="form-floating">
+            <input type="email" class="form-control" id="floatingInput" name="email" placeholder="name@example.com">
+            <label for="floatingInput">Email</label>
+            </div>
+            <div class="form-floating">
+            <input type="text" class="form-control" id="floatingPhone" name="phoneNum" placeholder="name@example.com">
+            <label for="floatingInput">Телефон</label>
+            </div>
+            <div class="form-floating">
+            <input type="password" class="form-control" id="floatingPassword" name="psw" placeholder="Password">
+            <label for="floatingPassword">Пароль</label>
+            </div>
+            <button class="w-100 btn btn-lg btn-primary" type="submit" id="regBtn">Регистрация</button>
+            <a href="{{ url_for('.login') }}" class ="switch_auth">Уже есть аккаунт? - Войдите</a>
+        </form>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js')}}"></script>
+  </body>
+</html>

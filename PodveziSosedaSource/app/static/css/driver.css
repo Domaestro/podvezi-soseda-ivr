@@ -1,0 +1,82 @@
+h1 {
+    margin-left:5px;
+}
+
+.create-trip {
+    position: absolute;
+    top:50px;
+    right:10px;
+    border-radius: 10px;
+}
+
+.statistic {
+    border-radius: 15px;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+    margin-top: 20px;
+    margin-right:5px;
+    margin-left:5px;
+    margin-bottom: 100px;
+    padding:5px;
+    min-height: 200px;
+}
+
+.blocks {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    margin-right:5px;
+    margin-left:5px;
+}
+
+.active-trips {
+    border-radius: 15px;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+    padding:5px;
+    min-height: 200px;
+    width: 100%;
+    margin-right:0px;
+}
+
+.history {
+    border-radius: 15px;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+    padding:5px;
+    min-height: 200px;
+    width:100%;
+    margin-left: 0px;
+    margin-top: 20px;
+}
+
+
+/* На большом экране*/
+@media (min-width: 767px) {
+    .create-trip {
+        position: absolute;
+        top:60px;
+        right:30px;
+        border-radius: 10px;
+        font-size: larger;
+    }
+    
+
+    .statistic {
+        margin-right: 30px;
+    }
+
+    .blocks {
+        flex-direction: row;
+        margin-right: 30px;
+        margin-top:40px;
+    }
+
+    .active-trips {
+        margin-right:10px;
+        width:50%;
+    }
+
+    .history {
+        margin-left:10px;
+        margin-top:0px;
+        width:50%;
+    }
+}

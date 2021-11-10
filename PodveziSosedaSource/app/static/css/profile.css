@@ -1,0 +1,102 @@
+a:active {
+    color: rgb(65, 133, 235);
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.ava-desc {
+    display: flex;
+    flex-direction: column;
+    border-radius: 15px;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+    margin-top: 10px;
+}
+
+.avatar-block {
+    width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    text-align: center;
+}
+
+#avatar {
+    max-width: 200px;
+}
+
+.description {
+    margin-top: 15px;
+    max-width: 350px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+}
+
+
+.info-block {
+    margin-top: 20px;
+    margin-left: 10px;
+    margin-right:10px;
+}
+
+.block-with-btn {
+    display: flex;
+}
+
+#settings-btn {
+    font-size: small;
+    margin-left: 300px;
+}
+
+.infType {
+    font-style: inherit;
+    font-weight: bolder;
+}
+
+#logout-btn {
+    max-width: 400px;
+    margin-top: 40px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 100px;
+}
+
+
+/* На большом экране*/
+@media (min-width: 767px) {
+    .content, .avatar-block, #logout-btn  {
+        max-width: inherit;
+        margin-left: 5px;
+        margin-right: inherit;
+    }
+
+    .ava-desc {
+        flex-direction: row;
+        margin-right: 10px;
+        margin-top: 10px;
+        padding-left: 10px;
+    }
+
+    .avatar-block {
+        width: 400px;
+        margin-left: 0px;
+        text-align: left;
+    }
+
+    .description {
+        margin-left: inherit;
+        margin-right: inherit;
+        border-bottom: none;
+        max-width: 500px;
+    }
+
+    .infType {
+        font-size: larger;
+    }
+}

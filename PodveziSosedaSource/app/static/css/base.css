@@ -1,0 +1,140 @@
+a.text_logo {
+    text-decoration: none;
+    color: #000;
+}
+.site-header { 
+position: fixed;
+top: 0;
+right:0;
+width: 100%;
+box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+background-color: #ffffff;
+padding: .5em 1em;
+height: 40px;
+
+z-index:100;
+}
+
+.site-header::after {
+content: "";
+display: table;
+clear: both;
+}
+
+.site-identity {
+float: left;
+}
+
+.site-identity h1 {
+font-size: 1em;
+margin: .3em 0 .3em 0;
+display: inline-block;
+}
+
+.site-identity img {
+max-width: 25px;
+float: left;
+margin: 0 10px 0 0;
+}
+
+
+main {
+    margin-top: 41px;
+}
+
+
+.nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 55px;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+    background-color: #ffffff;
+    display: flex;
+    overflow-x: auto;
+
+    z-index:100;
+}
+
+.nav__link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    min-width: 50px;
+    overflow: hidden;
+    white-space: nowrap;
+    font-family: sans-serif;
+    font-size: 13px;
+    color: #444444;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: background-color 0.1s ease-in-out;
+}
+
+.nav__link:hover {
+    background-color: #eeeeee;
+    color: #0064d6;
+}
+
+.nav__link--active {
+    color: #0064d6;
+}
+
+.nav__cont {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.nav__icon {
+    font-size: 18px;
+}
+
+/* На большом экране*/
+@media (min-width: 767px) {
+    .site-identity {
+        margin-left: 50px;
+    }
+    .site-identity img {
+        max-width: 30px;
+        float: left;
+        margin: 0 10px 0 0;
+    }
+
+    .site-identity h1 {
+        font-size: 1.5em;
+        margin:0;
+    }
+
+    .nav {
+        top:40px;
+        flex-direction: column;
+        bottom:inherit;
+        width:inherit;
+        height:100%;
+        box-shadow: none;
+        border-right: 1px solid rgba(0, 0, 0, 0.123);
+    }
+
+    .nav__cont {
+        flex-direction: row;
+    }
+
+    .nav__icon {
+        font-size: 30px;
+    }
+
+    .nav__link {
+        font-size: 22px;
+    }
+
+    .nav__text {
+        display: none;
+    }
+
+    main {
+        margin-left: 70px;
+    }
+}
