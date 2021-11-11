@@ -2,6 +2,7 @@ import os
 from flask import Flask
 
 from .database import db, migrate
+from .admin import admin
 
 # Вызов блюпринтов
 import app.General.controllers as generalModule
@@ -21,6 +22,7 @@ def create_app():
         db.create_all()
 
     migrate.init_app(app, db)
+    admin.init_app(app)
 
     # Регистрация блюпринтов
     app.register_blueprint(generalModule.general)
