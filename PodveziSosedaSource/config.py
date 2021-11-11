@@ -16,6 +16,9 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ENGINE_OPTIONS = {"pool_pre_ping": True}  
 
+    # Стиль админ-панели
+    FLASK_ADMIN_SWATCH = "flatly"
+
     # Максимальный объем передаваемых файлов
     MAX_CONTENT_LENGTH = 2048*2048
 
