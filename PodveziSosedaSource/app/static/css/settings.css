@@ -7,8 +7,8 @@
 }
 
 .ui-w-80 {
-    width: 80px !important;
-    height: auto;
+    max-height: 150px;
+    max-width: 150px;
 }
 
 .setting-name {
@@ -47,5 +47,8 @@ label.btn {
 
 /* На большом экране*/
 @media (min-width: 767px) {
-
+    .ui-w-80 {
+        max-height: 200px;
+        max-width: 200px;
+    }
 }

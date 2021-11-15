@@ -19,12 +19,12 @@ def confirm_email(token):
         db.session.commit()
         return redirect(url_for('/profile'))
     except SignatureExpired:
-        return render_template("Confirm_Email/confirm_email_token.html", text = "Ваша ссылка истекла, запросите новую")
+        return render_template("Confirm_Email/confirm_email_token.html", text = "Ваша ссылка истекла, запросите новую", isOk=False)
     except:
         db.session.rollback()
         if cur_user.email == None:
-            return render_template("Confirm_Email/confirm_email_token.html", text="Произошла ошибка, попробуйте позже")
-    return render_template("Confirm_Email/confirm_email_token.html", text="Успешно подтвержден адрес:", email=cur_user.email) 
+            return render_template("Confirm_Email/confirm_email_token.html", text="Произошла ошибка, попробуйте позже", isOk=False)
+    return render_template("Confirm_Email/confirm_email_token.html", text="Успешно подтвержден адрес:", email=cur_user.email, isOk=True) 
 
 
 @confirmEmail.route('/letter')

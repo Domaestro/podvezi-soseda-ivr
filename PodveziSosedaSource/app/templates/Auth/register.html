@@ -29,9 +29,10 @@
 
   </head>
   <body class="text-center">
-    <main class="form-sign" >
+    <main class="form-sign">
+      <div id="swup" class="transition-fade">
         <form action="{{ url_for('.register') }}" method="post" class="form-contact">
-            <img class="mb-4" src="{{ url_for('static', filename='imgs/logo.png')}}" alt="" width="72" height="57">
+          <img class="mb-4" src="{{ url_for('static', filename='imgs/logo_high.png')}}" alt="" width="72" height="57">
             <h1 class="h3 mb-3 fw-normal">Регистрация</h1>
 
             {% for cat, msg in get_flashed_messages(True) %}
@@ -61,6 +62,8 @@
             <button class="w-100 btn btn-lg btn-primary" type="submit" id="regBtn">Регистрация</button>
             <a href="{{ url_for('.login') }}" class ="switch_auth">Уже есть аккаунт? - Войдите</a>
         </form>
+      </div>
+        
     </main>
 
     <script src="{{ url_for('static', filename='js/bootstrap.min.js')}}"></script>

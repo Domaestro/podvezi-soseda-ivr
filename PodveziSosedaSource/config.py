@@ -18,6 +18,7 @@ class Config(object):
 
     # Стиль админ-панели
     FLASK_ADMIN_SWATCH = "flatly"
+    admin_login = os.environ["ADMIN_EMAIL"]
 
     # Максимальный объем передаваемых файлов
     MAX_CONTENT_LENGTH = 2048*2048
