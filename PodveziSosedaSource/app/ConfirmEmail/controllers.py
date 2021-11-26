@@ -1,9 +1,9 @@
-from flask import Blueprint, render_template, redirect, url_for
+from flask import Blueprint, render_template, redirect, url_for, session
 from flask_login import login_required, current_user
 from itsdangerous import SignatureExpired
 
 from app.models import db, Users
-from app.utils.utils import confirm_required, secure_token, cur_user
+from app.utils.utils import confirm_required, secure_token
 
 confirmEmail = Blueprint('confirmEmail', __name__, url_prefix ='/confirm_email')
 
@@ -13,8 +13,8 @@ def confirm_email(token):
     try:
         secure_token.loads(token, salt='email-confirm', max_age=600) # max_age - время жизни токена в секундах       
         # Здесь делаем запись в бд, что пользователь подвердил адрес
-        print("Пользователь подтвердил email " + cur_user.email)
-        Users.query.filter(Users.email == cur_user.email).first().confirmed = True
+        print("Пользователь подтвердил email " + session["email"])
+        Users.query.filter(Users.email == session["email"]).first().confirmed = True
         db.session.flush()
         db.session.commit()
         return redirect(url_for('/profile'))
@@ -22,9 +22,9 @@ def confirm_email(token):
         return render_template("Confirm_Email/confirm_email_token.html", text = "Ваша ссылка истекла, запросите новую", isOk=False)
     except:
         db.session.rollback()
-        if cur_user.email == None:
+        if "email" not in session:
             return render_template("Confirm_Email/confirm_email_token.html", text="Произошла ошибка, попробуйте позже", isOk=False)
-    return render_template("Confirm_Email/confirm_email_token.html", text="Успешно подтвержден адрес:", email=cur_user.email, isOk=True) 
+    return render_template("Confirm_Email/confirm_email_token.html", text="Успешно подтвержден адрес:", email=session["email"], isOk=True) 
 
 
 @confirmEmail.route('/letter')

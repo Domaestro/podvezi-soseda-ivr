@@ -58,6 +58,7 @@ body {
 
 .switch_auth {
   color: rgb(180, 180, 180);
+  padding-top: 10px;
 }
 
 .switch_auth:hover {

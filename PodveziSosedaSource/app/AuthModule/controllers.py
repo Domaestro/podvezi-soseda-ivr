@@ -16,7 +16,6 @@ login_manager.login_message_category = "success"
 
 @login_manager.user_loader
 def load_user(user_id):
-    print("load_user")
     return UserLogin().fromDB(user_id, Users)
 
 

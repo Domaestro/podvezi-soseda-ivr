@@ -2,10 +2,11 @@
 
 {% block css_style %}
 <link href="{{ url_for('static', filename='css/profile.css')}}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/swupy.css')}}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
-    <div class="content">
+    <div id="swup" class="content transition-fade">
         <div class = "ava-desc">
             <div class="avatar-block">
                 <img src="{{ url_for('profiles.load_user_avatar', user_id=id) }}" id = "avatar" class="img-thumbnail rounded" />
@@ -47,4 +48,8 @@
         var link = document.getElementById("profile_link");
         link.classList.add("nav__link--active");
     </script>
+
+    <!-- Swup - плавные переходы -->
+    <script src="{{ url_for('static', filename='js/swup.min.js')}}"></script>
+    <script>const swup = new Swup();</script>
 {% endblock %}

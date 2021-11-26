@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Выбрать адрес на карте</title>
+
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no initial-scale=1, maximum-scale=1"
+    />
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@latest/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> <!--Гугл шрифт-иконки-->
+
+    <script src="https://unpkg.com/leaflet@latest/dist/leaflet-src.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <style type="text/css">
+      body {
+        margin: 0;
+        font-family: sans-serif;
+        overflow: hidden;
+      }
+      #header {
+        text-align: center;
+        display: flex;
+        flex-direction: row;
+      }
+
+      #back_btn, #back_btn:hover, #back_btn:active {
+        color: black;
+        margin-left: 8px;
+        margin-top: 3px;
+      }
+
+      #back_icon {
+        font-size: 30px;
+      }
+
+      h3{
+          padding: 0;
+          margin: 0;
+          padding-top: 6px;
+          padding-bottom: 6px;
+          font-weight:500;
+          margin-left: auto;
+          margin-right: auto;
+          margin-top: 2px;
+      }
+      #map {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-top: 2px solid rgb(167, 167, 167);
+      }
+
+      #selectButton {
+        border: none; outline: none;
+        appearance: none;
+        max-width: 100px;
+        background-color: rgb(43, 82, 189);
+        color: rgb(241, 241, 241);
+        font-size: 13px;
+        padding: 5px;
+        border-radius: 30px;
+        margin-top: 4px;
+        margin-left: auto;
+        margin-right: auto;
+        transition-duration: .5s;
+        }
+        #selectButton:hover {
+            font-size: 15px;
+            transition-duration: .5s;
+        }
+        #selectButton:active {
+            background-color: rgb(2, 67, 245);
+            transition-duration: .5s;
+        }
+    </style>
+  </head>
+  <body>
+    <div id="header">
+      <a id = "back_btn" href="javascript:window.history.back();">
+        <div class="nav__cont">
+              <i id="back_icon" class="material-icons nav__icon">arrow_back</i>
+        </div>
+      </a>
+      <h3>Нажмите на карту, чтобы выбрать адрес</h3>
+    </div>
+    <div id="map"></div>
+   
+
+    <script type="text/javascript">
+      var map = L.map('map').setView([55.748002, 37.624397], 10);
+
+      var geocoder = L.Control.Geocoder.nominatim();
+      if (typeof URLSearchParams !== 'undefined' && location.search) {
+        var params = new URLSearchParams(location.search);
+        var geocoderString = params.get('geocoder');
+        if (geocoderString && L.Control.Geocoder[geocoderString]) {
+          console.log('Using geocoder', geocoderString);
+          geocoder = L.Control.Geocoder[geocoderString]();
+        } else if (geocoderString) {
+          console.warn('Unsupported geocoder', geocoderString);
+        }
+      }
+
+      var control = L.Control.geocoder({
+        query: 'Москва, улица Солянка',
+        placeholder: 'Вводите адрес',
+        geocoder: geocoder
+      }).addTo(map);
+      var marker;
+
+      L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
+
+      let address; // Здесь хранится адрес, который отправится при нажатии на кнопку
+      map.on('click', function(e) {
+        geocoder.reverse(e.latlng, map.options.crs.scale(map.getZoom()), function(results) {
+          var r = results[0];
+          if (r) {
+            if (marker) {
+              marker
+                .setLatLng(r.center)
+                .setPopupContent(r.html+"</br><button id='selectButton' onclick='sendAddress()'>Выбрать</button>" || r.name)
+                .openPopup();
+                console.log("1 "+r.center + r.name)
+                address=r.name
+            } else {
+              marker = L.marker(r.center)
+                .bindPopup(r.name +"</br><button id='selectButton' onclick='sendAddress()'>Выбрать</button>")
+                .addTo(map)
+                .openPopup();
+                console.log("2 "+r.center + r.name)
+                address=r.name
+            }
+          }
+        });
+      });
+
+      function sendAddress() {
+        const request = new XMLHttpRequest();
+        request.open('GET', `/drive/get_address_from_map?address=`+address, "Тест");
+        request.onload = () => {
+          window.location.href = "{{ url_for('driver.setup_drive') }}"
+        }; 
+        request.send();
+      }
+    </script>
+  </body>
+</html>

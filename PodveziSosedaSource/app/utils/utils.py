@@ -1,4 +1,4 @@
-from flask import redirect, url_for, flash
+from flask import redirect, url_for, flash, session
 from itsdangerous import URLSafeTimedSerializer
 from flask_login import current_user
 
@@ -7,9 +7,9 @@ from app.models import Users
 from .sendEmail import send_link
 
 # Класс и переменная для хранения и передачи данными между представлениями
-class cur_user(object):
-    email=None
-    place=None
+# class cur_user(object):
+#     email=None
+#     place=None
 
 
 
@@ -28,7 +28,7 @@ def confirm_required(func):
                 token = secure_token.dumps(email, salt='email-confirm')
                 link = url_for('confirmEmail.confirm_email', token=token, external=True)
                 send_link(link, email)
-                cur_user.email = email
+                session['email'] = email # cur_user.email = email
                 return redirect(url_for('confirmEmail.confirm_letter'))
         except AttributeError:
             flash('Войдите для доступа к закрытым страницам', 'error')

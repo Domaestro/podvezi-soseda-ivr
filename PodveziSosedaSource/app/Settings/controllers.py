@@ -1,9 +1,8 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from flask_login import login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from app.models import db, Users, Profiles
-from app.utils.utils import cur_user
 from app.utils.geoloc import get_geocode
 
 
@@ -113,7 +112,7 @@ def address_confirm():
     if request.method == 'POST':
         place = request.form["place"]
         location = get_geocode(place)
-        cur_user.place = place
+        session["place"] = place
         if location:
             return render_template("Settings/address-confirm.html", address=location.address)
         else:
@@ -126,7 +125,7 @@ def address_confirm():
 @login_required
 def address_upload():
     if request.method == 'POST':
-        place = cur_user.place
+        place = session["place"]
         location = get_geocode(place)
         print("Адрес"+location.address)
         if location:

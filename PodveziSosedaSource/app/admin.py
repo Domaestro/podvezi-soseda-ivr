@@ -9,6 +9,7 @@ from .models import Users, Profiles
 
 
 class AdminModelView(ModelView):
+    column_display_pk = True
     def is_accessible(self):
         user = Users.query.filter(Users.id == current_user.get_id()).first()
         return user.email==Config.admin_login
