@@ -23,9 +23,9 @@
                     <div class="col-md-2"><h5>Тип поездки</h5></div>
                     <div class="col-md-8">
                       <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                        <input type="radio" class="btn-check" name="tripType" id="btnradio1" autocomplete="off" onchange="changeAddressTitle(), safe_form_input()">
+                        <input type="radio" class="btn-check" name="tripType" id="btnradio1" autocomplete="off" value="1" onchange="changeAddressTitle(), safe_form_input()">
                         <label class="btn btn-outline-primary shadow-none" for="btnradio1">Домой</label>     
-                        <input type="radio" class="btn-check" name="tripType" id="btnradio2" autocomplete="off" onchange="changeAddressTitle(), safe_form_input()" checked>
+                        <input type="radio" class="btn-check" name="tripType" id="btnradio2" autocomplete="off" value="2" onchange="changeAddressTitle(), safe_form_input()" checked>
                         <label class="btn btn-outline-primary shadow-none" for="btnradio2">В город</label>
                       </div>
                     </div>
@@ -35,7 +35,10 @@
                     <div class="col-md-8">
                       <div id = "input_container" class="input-group mb-1">
                         <input id="addressInput" onkeypress="search()" onclick="search()" onchange="safe_form_input()" class="form-control autocomplete" aria-describedby="button-addon2" aria-label="Адрес" name="addressAuto" placeholder="Введите адрес" type="text" required/>
-                        <button type="button" class="btn btn-light shadow-none" onclick="clear_input()">Очистить</button>
+                        <button type="button" class="btn btn-light shadow-none" onclick="clear_input()">
+                          <div class="nav__cont">
+                          <i class="material-icons nav__icon" style="font-size: 18px;">clear</i>
+                        </div></button>
                       </div>
                       <a href="{{ url_for('driver.maps') }}" id="openMapBtn" class="ml-2"> Выбрать на карте</a>
                     </div>
@@ -43,7 +46,7 @@
                   <div class="row mt-4">
                     <div class="col-md-2"><h5>Когда</h5></div>
                     <div class="col-md-8">
-                      <select id="tripDay" class="form-select form-select-md" onchange="safe_form_input()" aria-label=".form-select-sm example">
+                      <select id="tripDay" class="form-select form-select-md" onchange="safe_form_input()" name="day" aria-label=".form-select-sm example">
                         <option value="1">Сегодня</option>
                         <option selected value="2">Завтра</option>
                         <option value="3">Послезавтра</option>
@@ -53,7 +56,7 @@
                   <div class="row mt-4">
                     <div class="col-md-2"><h5>Во сколько</h5></div>
                     <div class="col-md-8">
-                      <input type="text" id="timepicker" class="form-control" data-bs-toggle="modal" placeholder='Выберите время' data-bs-target="#timePickerModal" required onkeyup="var yratext=/['\w', '\s']/; if(yratext.test(this.value)) this.value=''">
+                      <input type="text" id="timepicker" class="form-control" name="timeRaw" data-bs-toggle="modal" placeholder='Выберите время' data-bs-target="#timePickerModal" required onkeyup="var yratext=/['\w', '\s']/; if(yratext.test(this.value)) this.value=''">
                       <div class="modal fade" id="timePickerModal" tabindex="-1" aria-labelledby="timePicker" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
                           <div class="modal-dialog modal-dialog-centered ">
                               <div class="modal-content">
@@ -78,7 +81,7 @@
                   <div class="row mt-4">
                     <div class="col-md-2"><h5>Число пассажиров</h5></div>
                     <div class="col-md-8">
-                      <select id="passengersNum" class="form-select form-select-md" onchange="safe_form_input()" aria-label=".form-select-sm example">
+                      <select id="passengersNum" class="form-select form-select-md" name="passengersNum" onchange="safe_form_input()" aria-label=".form-select-sm example">
                         <option value="1">1 пассажир</option>
                         <option selected value="2">2 пассажира</option>
                         <option value="3">3 пассажира</option>

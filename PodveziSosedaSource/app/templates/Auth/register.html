@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Регистрация</title>
 
-
+    <link rel="manifest" href="/manifest.json"> <!--Манифест для работы PWA приложения-->
     <link href="{{ url_for('static', filename='css/bootstrap.min.css')}}" rel="stylesheet"> <!--Bootstrap-->
     <link rel="shortcut icon" href="{{ url_for('static', filename='imgs/favicon.ico') }}"> <!--Иконка-->
 
@@ -66,7 +66,8 @@
       </div>
         
     </main>
-
+    
+    <script type="text/javascript" src="/app.js"></script> <!--Сервис-воркер для PWA-->
     <script src="{{ url_for('static', filename='js/bootstrap.min.js')}}"></script>
   </body>
 </html>

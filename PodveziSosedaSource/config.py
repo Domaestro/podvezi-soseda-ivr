@@ -9,7 +9,7 @@ class Config(object):
 
     # Случайный ключ, которые будет исползоваться для подписи
     # данных, например cookies.
-    SECRET_KEY = os.urandom(12)
+    SECRET_KEY = os.environ["SECRET_KEY"]
 
     # Настройки базы данных
     SQLALCHEMY_DATABASE_URI = os.environ["DATABASE_URI"]

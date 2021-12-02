@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="{{ url_for('static', filename='pwa/manifest.json') }}"> <!--Манифест для работы PWA приложения-->
     <link href="{{ url_for('static', filename='css/bootstrap.min.css')}}" rel="stylesheet"> <!--Bootstrap-->
     <link rel="shortcut icon" href="{{ url_for('static', filename='imgs/favicon.ico') }}"> <!--Иконка-->
     <title>Подвези соседа! - Подтвердите свою почту</title>
@@ -29,5 +30,7 @@
           <div class="text-center"><a href="/settings" class="btn btn-secondary mt-2 ">Настройки</a></div>
         </div>
     </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='pwa/app.js') }}"></script> <!--Сервис-воркер для PWA-->
 </body>
 </html>

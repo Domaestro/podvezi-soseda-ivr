@@ -163,6 +163,6 @@ request.onload = () => {
   addressInput.value = responseObj.address;
   tripTypeRadio[responseObj.radioChecked].checked = true;
   tripDay.options[responseObj.tripDayNum].selected = true;
-  timeInput.value = responseObj.rawTime;
+  if (responseObj.rawTime != "") timeInput.value = responseObj.rawTime;
   passengersNum.options[responseObj.passengersValue].selected = true;
 }; 

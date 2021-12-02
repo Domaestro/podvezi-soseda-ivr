@@ -35,7 +35,13 @@ class Trips(db.Model):
     driver_id = db.Column(db.Integer)
     passengers_ids = db.Column(db.ARRAY(db.Integer))
     max_passengers_amount = db.Column(db.Integer, default=2)
-    from_address = db.Column(db.String)
+
+    from_address = db.Column(db.String)    
+    from_latitude = db.Column(db.Float, nullable=True)
+    from_longitude = db.Column(db.Float, nullable=True)
+
     to_address = db.Column(db.String)
-    date = db.Column(db.Date)
-    time = db.Column(db.Time)
+    to_latitude = db.Column(db.Float, nullable=True)
+    to_longitude = db.Column(db.Float, nullable=True)
+
+    trip_datetime = db.Column(db.DateTime)
