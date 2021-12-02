@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block css_style %}
+<style>
+    .container{
+        margin-top: 60px;
+        margin-bottom: 60px;
+    }
+
+    #button_block {
+        display: flex;
+        flex-direction: column;
+    }
+
+    a {
+            min-width: 100%;
+    }
+
+    .infor {
+        margin-left: 4px;
+        padding: 2px;
+        border-color: grey;
+        background-color: rgb(209, 217, 240);
+        border-radius: 5px;
+    }
+
+    /* На большом экране*/
+    @media (min-width: 767px) {
+        .container{
+            margin-top: 80px;
+        }
+        #button_block {
+            display: inherit;
+        }
+        a {
+            min-width: initial;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+      <div class="col">
+        <div class="card">
+            <div class="card-header">
+                <h3>Была найдена похожая поездка</h3>
+            </div>
+            <div class="card-body">
+              <h5 class="card-title mb-3">Информация</h5>
+              <p class="card-text"><b>Откуда: </b><span class="infor">{{from_where}}</span></p>
+              <p class="card-text"><b>Куда: </b><span class="infor">{{to_where}}</span></p>
+              <p class="card-text"><b>Дата: </b><span class="infor">{{date}}</span></p>
+              <p class="card-text"><b>Время: </b><span class="infor">{{time}}</span></p>
+              <p class="card-text"><b>Водитель: </b><a href="{{driver_link}}">{{driver_name}}</a></p>
+              <div id="button_block" class="mt-4">
+                <a href="#" class="btn btn-primary mx-auto mt-2 shadow-none">Стать пассажиром</a>
+                <a href="{{url_for('driver.create_trip_by_force')}}" class="btn btn-secondary mx-auto mt-2 shadow-none">Создать собственную поездку</a>
+                <a href="/join" class="btn btn-secondary mx-auto mt-2 shadow-none">Просмотр всех поездок</a>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+    <!-- Блок скрипта для выделения иконки в меню -->
+    <script>    
+        var link = document.getElementById("drive_link");
+        link.classList.add("nav__link--active");
+    </script>
+{% endblock %}

@@ -16,7 +16,9 @@ driver = Blueprint('driver', __name__, url_prefix ='/drive')
 @confirm_required
 @login_required
 def drive():
-    user = Users.query.filter(Users.id == current_user.get_id()).first()
+    trips = Trips.query.filter(Trips.driver_id == current_user.get_id()).all()
+    print(trips)
+    print(len(trips))
     return render_template("Driver/driver.html")
 
 
@@ -37,17 +39,10 @@ def setup_drive():
     # Обработка формы
     if request.method == "POST":
 
-        # Обнуление сессии
-        session["radioChecked"] = 0
-        session["address"] = ""
-        session["tripDayNum"] = 0
-        session["rawTime"] = ""
-        session["passengersValue"] = 0
-
         # Получение данных из формы
         trip_type = int(request.form["tripType"])
         address = get_geocode_osm(request.form["addressAuto"])
-        day_delta = int(request.form["day"]) # Через сколько дней будет поездка
+        day_delta = int(request.form["day"])-1 # Через сколько дней будет поездка
         time_raw = request.form["timeRaw"]
         passengers = int(request.form["passengersNum"])
 
@@ -73,20 +68,39 @@ def setup_drive():
         
         trip_date = date.today() + timedelta(days=day_delta)
         trip_datetime = datetime.strptime(f'{trip_date.day}/{trip_date.month}/{trip_date.year} {time_raw}', r'%d/%m/%Y %H:%M')
+        trip_time = trip_datetime.time()
         passengers_number = passengers
 
         #print(f'Создана новая поездка \nОткуда: {address_from}\nКуда: {address_to}\nДата поездки: {trip_date}\nВремя поездки: {trip_datetime}\nМаксимальное число пассажиров: {passengers_number}')
 
-        ####
-        #### Проверка этой новой поездки на схожесть с уже существующими
-        # similar_trips = Trips.query.filter( trip_datetime.date==Trips.trip_datetime.date \
-        #                                     and (abs((trip_datetime-Trips.trip_datetime).hour) <= 1 and abs((trip_datetime-Trips.trip_datetime).minute) <= 30) \
-        #                                     and gd_distance(from_lati, Trips.from_latitude) <= 0.5 \
-        #                                     and gd_distance(to_lati, Trips.to_latitude) <= 0.5
-        #                                )
-        # similar_trips = Trips.query.filter(gd_distance((from_lati, from_long), (Trips.from_latitude, Trips.from_long)) <= 0.5).first()
-        # Надо добавить hybrid фильтр в модель
-        ####
+        # Проверка, не насоздавал ли пользователь слишком много поездок
+        look_for_trips = Trips.query.filter( (Trips.trip_date==trip_date) and (Trips.driver_id==current_user.get_id())).all()
+        if len(look_for_trips) > 3:
+            flash("Запрещено создавать больше трех поездок на один день", "error")
+            print(current_user.get_id())
+            return redirect(url_for("driver.drive"))
+
+        # Проверка этой новой поездки на схожесть с уже существующими (Привет Купцов)
+        same_date_trips = Trips.query.filter(Trips.trip_date==trip_date).all()
+        for trp in same_date_trips:
+            if gd_distance( (trp.from_latitude, trp.from_longitude ), (from_lati, from_long) ) < 0.6 and \
+               gd_distance( (trp.to_latitude, trp.to_longitude ), (to_lati, to_long) ) < 0.6 and \
+               trp.trip_time.hour==trip_time.hour and \
+               abs(trp.trip_time.minute-trip_time.minute) < 30:
+
+                driver = Users.query.filter(Users.id==trp.driver_id).first()
+                if driver: 
+                    driver_name = driver.first_name+" "+driver.second_name
+                    driver_link = url_for("profiles.user", user_id=driver.id)
+
+                session["rawTime"]=time_raw
+                return render_template("Driver/similar.html",
+                                      from_where=trp.from_address, 
+                                      to_where=trp.to_address,
+                                      date=trp.trip_date, 
+                                      time=f'{trp.trip_time.hour}:{trp.trip_time.minute}', 
+                                      driver_link=driver_link, 
+                                      driver_name=driver_name)
 
         # Запись в бд
         try:
@@ -98,11 +112,20 @@ def setup_drive():
                           to_address=address_to,
                           to_latitude=to_lati,
                           to_longitude=to_long,
-                          trip_datetime=trip_datetime
-                          )
+                          trip_date=trip_date,
+                          trip_time=trip_time)
             db.session.add(trips)
             db.session.flush()
             db.session.commit()
+
+            flash("Поездка успешно создана", "success")
+
+            # Обнуление сессии
+            session["radioChecked"] = 0
+            session["address"] = ""
+            session["tripDayNum"] = 0
+            session["rawTime"] = ""
+            session["passengersValue"] = 0
 
         except Exception as exc:
             print(exc)
@@ -156,3 +179,79 @@ def safe_form_input():
     session["rawTime"] = request.args.get("timeinput")
     session["passengersValue"] = int(request.args.get("passengers"))-1
     return "ok"
+
+
+@driver.route("/force", methods=["GET"])
+@confirm_required
+@login_required
+def create_trip_by_force():
+    # Получение данных, сохраненных в сессии
+    trip_type = int(session["radioChecked"])
+    address = get_geocode_osm(session["address"])
+    day_delta = int(session["tripDayNum"])-1 # Через сколько дней будет поездка
+    time_raw = session["rawTime"]
+    passengers = int(session["passengersValue"])
+
+    # Преобразование данных
+    if day_delta == 0:
+        day_delta = 1
+
+    if passengers == 0:
+        passengers = 1
+
+    profile = Profiles.query.filter(Profiles.user_id == current_user.get_id()).first()
+
+    if trip_type == 1 or trip_type == 0:
+        # Домой
+        address_from = address.address
+        address_to = profile.home_address # Домашний адрес, указанный в профиле пользователя
+        from_lati = address.latitude
+        from_long = address.longitude
+        to_lati = profile.home_latitude
+        to_long = profile.home_longitude
+    else:
+        # В город
+        address_from = profile.home_address # Домашний адрес, указанный в профиле пользователя
+        address_to = address.address
+        from_lati = profile.home_latitude
+        from_long = profile.home_longitude
+        to_lati = address.latitude
+        to_long = address.longitude
+    
+    trip_date = date.today() + timedelta(days=day_delta)
+    trip_datetime = datetime.strptime(f'{trip_date.day}/{trip_date.month}/{trip_date.year} {time_raw}', r'%d/%m/%Y %H:%M')
+    trip_time = trip_datetime.time()
+    passengers_number = passengers
+
+    # Запись в бд
+    try:
+        trips = Trips(driver_id=current_user.get_id(), 
+                        max_passengers_amount=passengers_number,
+                        from_address=address_from,
+                        from_latitude=from_lati,
+                        from_longitude=from_long,
+                        to_address=address_to,
+                        to_latitude=to_lati,
+                        to_longitude=to_long,
+                        trip_date=trip_date,
+                        trip_time=trip_time)
+        db.session.add(trips)
+        db.session.flush()
+        db.session.commit()
+
+        flash("Поездка успешно создана", "success")
+
+        # Обнуление сессии
+        session["radioChecked"] = 0
+        session["address"] = ""
+        session["tripDayNum"] = 0
+        session["rawTime"] = ""
+        session["passengersValue"] = 0
+
+    except Exception as exc:
+        print(exc)
+        db.session.rollback()
+        flash('Не удалось создать поездку', category = 'error')
+        print("Ошибка добавления поездки в бд")
+    
+    return redirect(url_for("driver.drive"))

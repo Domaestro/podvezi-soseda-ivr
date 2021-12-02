@@ -44,4 +44,5 @@ class Trips(db.Model):
     to_latitude = db.Column(db.Float, nullable=True)
     to_longitude = db.Column(db.Float, nullable=True)
 
-    trip_datetime = db.Column(db.DateTime)
+    trip_date = db.Column(db.Date)
+    trip_time = db.Column(db.Time)

@@ -1,3 +1,11 @@
+.success {
+    background-color: rgb(56, 167, 56);
+}
+
+.error {
+    background-color: rgb(204, 59, 59);
+}
+
 h1 {
     margin-left:5px;
 }
@@ -78,5 +86,14 @@ h1 {
         margin-left:10px;
         margin-top:0px;
         width:50%;
+    }
+
+    .active-trips, .history, .statistic {
+        transition-duration: 0.3s;
+        min-height: 300px;
+    }
+
+    .active-trips:hover , .history:hover , .statistic:hover  {
+        box-shadow: 0 0 5px 4px rgba(192, 192, 192, 0.603);
     }
 }
