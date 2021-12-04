@@ -114,7 +114,9 @@
       }).addTo(map);
       var marker;
 
-      L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+      let classic = "https://{s}.tile.osm.org/{z}/{x}/{y}.png" // Быстро работает
+      let humanitarian = "http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png" // Красивее
+      L.tileLayer(humanitarian, {
         attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(map);
 

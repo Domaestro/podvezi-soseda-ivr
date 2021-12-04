@@ -55,6 +55,9 @@ h1 {
     margin-top: 20px;
 }
 
+.head {
+    background-color: rgb(209, 209, 209);
+}
 
 /* На большом экране*/
 @media (min-width: 767px) {

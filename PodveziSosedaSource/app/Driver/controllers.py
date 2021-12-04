@@ -16,8 +16,15 @@ driver = Blueprint('driver', __name__, url_prefix ='/drive')
 @confirm_required
 @login_required
 def drive():
-    trips = Trips.query.filter(Trips.driver_id == current_user.get_id()).all()
-    return render_template("Driver/driver.html")
+    first_3_actual_trips = Trips.query.filter(Trips.driver_id == current_user.get_id(), Trips.trip_date>=datetime.now().date()) \
+                                .order_by(Trips.trip_date).limit(3).all()
+    days_possible=["Сегодня", "Завтра", "Послезавтра"]
+    days=[days_possible[first_3_actual_trips[i].trip_date.day-datetime.now().date().day] for i in range(3)]
+
+    last_3_in_history = Trips.query.filter(Trips.driver_id == current_user.get_id(), Trips.trip_date<datetime.now().date()) \
+                                .order_by(Trips.trip_date.desc()).limit(3).all()
+
+    return render_template("Driver/driver.html", trips=first_3_actual_trips, days=days, history=last_3_in_history)
 
 
 @driver.route('/setup', methods=["GET", "POST"])
@@ -189,6 +196,7 @@ def safe_form_input():
     return "ok"
 
 
+# Создание поездки, даже если уже есть похожая
 @driver.route("/force", methods=["GET"])
 @confirm_required
 @login_required
@@ -263,3 +271,22 @@ def create_trip_by_force():
         print("Ошибка добавления поездки в бд")
     
     return redirect(url_for("driver.drive"))
+
+
+@driver.route("/active_trips", methods=["GET"])
+@confirm_required
+@login_required
+def active_trips():
+    actual_trips = Trips.query.filter(Trips.driver_id == current_user.get_id(), Trips.trip_date>=datetime.now().date()) \
+                                .order_by(Trips.trip_date).all()
+    days_possible=["Сегодня", "Завтра", "Послезавтра"]
+    days=[days_possible[actual_trips[i].trip_date.day-datetime.now().date().day] for i in range(len(actual_trips))]
+    return render_template("Driver/active_trips.html", trips=actual_trips, days=days)
+
+
+@driver.route("/history", methods=["GET"])
+@confirm_required
+@login_required
+def history():
+    # Пагинация
+    return render_template("Driver/history.html")

@@ -29,24 +29,84 @@
         <div class="blocks">
             <div class="active-trips p-3">
                 <h3 class="">Активные поездки:</h3>
-                <!-- <div>
-                    <div class="bg-secondary">
-                        <span>00:00</span>
-                        <a>Имя фамилия водителя </a>
+
+                <!-- <div class="border rounded bg-light mt-2">
+                    <div class="head rounded text-muted p-1">
+                        <a href="#" class="text-muted text-decoration-none">Имя фамилия</a>
+                        <span class="text-dark" style="float: right;">Завтра 00:00</span>
                     </div>
-                    <b>Откуда: </b>
-                    <b>Куда: </b>
-                    <p>Это описание это описание</p>
+                    <div class="mx-1">
+                        <p><b>Откуда: </b>адрес</p>
+                        <p><b>Куда: </b>адрес</p>
+                        <a href="" class="btn btn-secondary btn-sm mx-2 shadow-none" style="float: right;">Подробнее</a>
+                        <p class="text-secondary">Это описание это описание</p>
+                    </div>
                 </div> -->
+                {% if trips %}
+                    {% for i in range(trips|length) %}
+                        <div class="border rounded bg-light mt-3 shadow-sm">
+                            <div class="head rounded text-muted p-1">
+                                <a href="#" class="text-dark text-decoration-none">Поездка</a>
+                                <span class="text-dark" style="float: right;">{{ days[i] }} {{ trips[i].trip_time.strftime("%H:%M") }}</span>
+                            </div>
+                            <div class="mx-1">
+                                <p><b>Откуда: </b>{{ trips[i].from_address }}</p>
+                                <p><b>Куда: </b>{{ trips[i].to_address }}</p>
+                                <a href="" class="btn btn-secondary btn-sm mx-2 shadow-none" style="float: right;">Подробнее</a>
+                                <p class="text-secondary">
+                                    {% if trips[i].description %}
+                                        {{ trips[i].description }}
+                                    {% else %}
+                                        Описание отсутсвует
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <div class="text-center">
+                        <a href="{{ url_for('driver.active_trips') }}" class="btn btn-primary shadow-none mt-3">Посмотреть все</a>
+                    </div>
+                {% else %}
+                    <p class="text-muted mt-3">Нет активных поездок</p>
+                {% endif %}
             </div>
 
             <div class="history p-3">
                 <h3 class="">История поездок:</h3>
+
+                {% if history %}
+                {% for i in range(history|length) %}
+                    <div class="border rounded bg-light mt-3 shadow-sm">
+                        <div class="head rounded text-muted p-1">
+                            <a href="#" class="text-dark text-decoration-none">Поездка</a>
+                            <span class="text-dark" style="float: right;">{{ history[i].trip_date.strftime("%d.%m.%Y") }} {{ history[i].trip_time.strftime("%H:%M") }}</span>
+                        </div>
+                        <div class="mx-1">
+                            <p><b>Откуда: </b>{{ history[i].from_address }}</p>
+                            <p><b>Куда: </b>{{ history[i].to_address }}</p>
+                            <a href="" class="btn btn-secondary btn-sm mx-2 shadow-none" style="float: right;">Подробнее</a>
+                            <p class="text-secondary">
+                                {% if history[i].description %}
+                                    {{ history[i].description }}
+                                {% else %}
+                                    Описание отсутсвует
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="text-center">
+                    <a href="{{ url_for('driver.history') }}" class="btn btn-primary shadow-none mt-3">Посмотреть все</a>
+                </div>
+                {% else %}
+                    <p class="text-muted mt-3">Нет истории</p>
+                {% endif %}
             </div>
         </div>
         <div class="statistic p-3">
             <h3 class="">Cтатистика:</h3>
-            <p class="">Совершенно поездок: </p>
+            <p class="">Совершено поездок: </p>
+            <p class="">Людей перевезено: </p>
         </div>
     </div>
 {% endblock %}

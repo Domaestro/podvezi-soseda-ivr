@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block css_style %}
+    <style>
+        h1 {
+            text-align: center;
+        }
+        /* На большом экране*/
+        @media (min-width: 767px) {
+            h1 {
+                text-align: left;
+            }
+            .trip{
+                margin-right: 100px;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <h1>Активные поездки</h1>
+    {% if trips %}
+        {% for i in range(trips|length) %}
+            <div class="trip mt-4">
+                <div class="card mx-md-0 mx-sm-3">
+                    <div class="card-header">
+                    <h4 class="text-dark" style="float: right;">{{ days[i] }} {{ trips[i].trip_time.strftime("%H:%M") }}</h4>
+                    <h3>Поездка</h3>
+                    </div>
+                    <div class="card-body">
+                        <p><b>Откуда: </b>{{ trips[i].from_address }}</p>
+                        <p><b>Куда: </b>{{ trips[i].to_address }}</p>
+                        <p><b>Пассажиров: </b>{{ trips[i].max_passengers_amount }}</p>
+                        <div style="float: right; display: flex; flex-direction: column;">
+                            <a href="" class="btn btn-primary btn-sm mx-2 mb-1 shadow-none" >Подробнее</a>
+                            <a href="" class="btn btn-secondary btn-sm mx-2 shadow-none">Редактировать</a>
+                        </div>
+                        <p class="text-secondary">
+                            {% if trips[i].description %}
+                                {{ trips[i].description }}
+                            {% else %}
+                                Описание отсутсвует
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <h3 class="text-muted mt-3">Нет активных поездок</h3>
+    {% endif %}
+    <br class="mb-5">
+{% endblock %}
+
+{% block script %}
+    <!-- Блок скрипта для выделения иконки в меню -->
+    <script>    
+        var link = document.getElementById("drive_link");
+        link.classList.add("nav__link--active");
+    </script>
+{% endblock %}
