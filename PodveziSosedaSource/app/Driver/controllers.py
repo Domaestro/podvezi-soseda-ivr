@@ -17,8 +17,6 @@ driver = Blueprint('driver', __name__, url_prefix ='/drive')
 @login_required
 def drive():
     trips = Trips.query.filter(Trips.driver_id == current_user.get_id()).all()
-    print(trips)
-    print(len(trips))
     return render_template("Driver/driver.html")
 
 
@@ -26,6 +24,13 @@ def drive():
 @confirm_required
 @login_required
 def setup_drive():
+
+    # Проверка заполненности профиля у пользователя
+    profile = Profiles.query.filter(Profiles.user_id == current_user.get_id()).first()
+    if not profile.home_address:
+        flash("Вы не указали домашний адрес в профиле", "error")
+        return redirect(url_for("driver.drive"))
+
     # Создание переменных в сессии, в которых будет хранится информация из формы
     session_strings = ["address", "rawTime"]
     session_ints = ["radioChecked", "tripDayNum", "passengersValue"]
@@ -45,6 +50,7 @@ def setup_drive():
         day_delta = int(request.form["day"])-1 # Через сколько дней будет поездка
         time_raw = request.form["timeRaw"]
         passengers = int(request.form["passengersNum"])
+        description = request.form["tripDescription"]
 
         # Преобразование данных
         profile = Profiles.query.filter(Profiles.user_id == current_user.get_id()).first()
@@ -74,10 +80,10 @@ def setup_drive():
         #print(f'Создана новая поездка \nОткуда: {address_from}\nКуда: {address_to}\nДата поездки: {trip_date}\nВремя поездки: {trip_datetime}\nМаксимальное число пассажиров: {passengers_number}')
 
         # Проверка, не насоздавал ли пользователь слишком много поездок
-        look_for_trips = Trips.query.filter( (Trips.trip_date==trip_date) and (Trips.driver_id==current_user.get_id())).all()
-        if len(look_for_trips) > 3:
+        look_for_trips = Trips.query.filter(Trips.trip_date==trip_date, Trips.driver_id==current_user.get_id()).all()
+        #look_for_trips = Trips.query.filter( Trips.driver_id==current_user.get_id()).all()
+        if len(look_for_trips) > 2:
             flash("Запрещено создавать больше трех поездок на один день", "error")
-            print(current_user.get_id())
             return redirect(url_for("driver.drive"))
 
         # Проверка этой новой поездки на схожесть с уже существующими (Привет Купцов)
@@ -94,6 +100,7 @@ def setup_drive():
                     driver_link = url_for("profiles.user", user_id=driver.id)
 
                 session["rawTime"]=time_raw
+                session["tripDescription"]=description
                 return render_template("Driver/similar.html",
                                       from_where=trp.from_address, 
                                       to_where=trp.to_address,
@@ -113,7 +120,8 @@ def setup_drive():
                           to_latitude=to_lati,
                           to_longitude=to_long,
                           trip_date=trip_date,
-                          trip_time=trip_time)
+                          trip_time=trip_time,
+                          description=description)
             db.session.add(trips)
             db.session.flush()
             db.session.commit()
@@ -188,16 +196,12 @@ def create_trip_by_force():
     # Получение данных, сохраненных в сессии
     trip_type = int(session["radioChecked"])
     address = get_geocode_osm(session["address"])
-    day_delta = int(session["tripDayNum"])-1 # Через сколько дней будет поездка
+    day_delta = int(session["tripDayNum"]) # Через сколько дней будет поездка
     time_raw = session["rawTime"]
     passengers = int(session["passengersValue"])
+    description = session["tripDescription"]
 
     # Преобразование данных
-    if day_delta == 0:
-        day_delta = 1
-
-    if passengers == 0:
-        passengers = 1
 
     profile = Profiles.query.filter(Profiles.user_id == current_user.get_id()).first()
 
@@ -221,7 +225,10 @@ def create_trip_by_force():
     trip_date = date.today() + timedelta(days=day_delta)
     trip_datetime = datetime.strptime(f'{trip_date.day}/{trip_date.month}/{trip_date.year} {time_raw}', r'%d/%m/%Y %H:%M')
     trip_time = trip_datetime.time()
-    passengers_number = passengers
+    if passengers==0:
+        passengers_number = 1 
+    else:
+        passengers_number = passengers+1
 
     # Запись в бд
     try:
@@ -234,7 +241,8 @@ def create_trip_by_force():
                         to_latitude=to_lati,
                         to_longitude=to_long,
                         trip_date=trip_date,
-                        trip_time=trip_time)
+                        trip_time=trip_time,
+                        description=description)
         db.session.add(trips)
         db.session.flush()
         db.session.commit()

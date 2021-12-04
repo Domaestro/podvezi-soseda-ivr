@@ -46,3 +46,5 @@ class Trips(db.Model):
 
     trip_date = db.Column(db.Date)
     trip_time = db.Column(db.Time)
+
+    description = db.Column(db.Text, nullable=True)
