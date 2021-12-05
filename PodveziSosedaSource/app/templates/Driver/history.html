@@ -18,33 +18,39 @@
 {% endblock %}
 
 {% block content %}
-    <h1>История поездок</h1>
+    <h1 class="mt-5">История поездок</h1>
     {% if trips %}
-        {% for i in range(trips|length) %}
-            <div class="trip mt-4">
-                <div class="card mx-md-0 mx-sm-3">
-                    <div class="card-header">
-                    <h4 class="text-dark" style="float: right;">{{ days[i] }} {{ trips[i].trip_time.strftime("%H:%M") }}</h4>
-                    <h3>Поездка</h3>
-                    </div>
-                    <div class="card-body">
-                        <p><b>Откуда: </b>{{ trips[i].from_address }}</p>
-                        <p><b>Куда: </b>{{ trips[i].to_address }}</p>
-                        <p><b>Пассажиров: </b>{{ trips[i].max_passengers_amount }}</p>
-                        <div style="float: right; display: flex; flex-direction: column;">
-                            <a href="" class="btn btn-primary btn-sm mx-2 mb-1 shadow-none" >Подробнее</a>
+        <div id="trips_list" class="mx-1">
+            {% for i in range(trips|length) %}
+                <div class="trip mt-4">
+                    <div class="card mx-md-0 mx-sm-3">
+                        <div class="card-header">
+                        <h4 class="text-dark" style="float: right;">{{ trips[i].trip_date.strftime("%d.%m.%Y") }} {{ trips[i].trip_time.strftime("%H:%M") }}</h4>
+                        <h3>Поездка</h3>
                         </div>
-                        <p class="text-secondary">
-                            {% if trips[i].description %}
-                                {{ trips[i].description }}
-                            {% else %}
-                                Описание отсутсвует
-                            {% endif %}
-                        </p>
+                        <div class="card-body">
+                            <p><b>Откуда: </b>{{ trips[i].from_address }}</p>
+                            <p><b>Куда: </b>{{ trips[i].to_address }}</p>
+                            <p><b>Пассажиров: </b>{{ trips[i].max_passengers_amount }}</p>
+                            <p class="text-secondary">
+                                {% if trips[i].description %}
+                                    {{ trips[i].description }}
+                                {% else %}
+                                    Описание отсутсвует
+                                {% endif %}
+                            </p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
+        <div class="text-center mt-5">
+            <button id="lmbtn" class="btn btn-secondary shadow-none btn-lg" onclick="load_more()">
+                <span id="spinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" hidden></span>
+                <span class="sr-only">Загрузить еще</span>
+            </button>
+            <p id = "endhistory" class="text-muted mt-3" hidden>Это все ваши поездки</p>
+        </div>
     {% else %}
         <h3 class="text-muted mt-3">Нет истории</h3>
     {% endif %}
@@ -52,6 +58,68 @@
 {% endblock %}
 
 {% block script %}
+    <!-- Бесконечный скролл -->
+    <script>
+        let page_status = {
+            next_page: 2
+        }
+
+        async function load_more() {
+            spin = document.getElementById("spinner");
+            spin.removeAttribute("hidden")
+            load_button = document.getElementById("lmbtn")
+            load_button.setAttribute("disabled", true);
+            
+            let response = await fetch('{{ url_for("driver.history") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(page_status)
+            });
+            
+            page_status["next_page"]++;
+
+            let result = await response.json();
+
+            spin.setAttribute("hidden", true);
+            load_button.removeAttribute("disabled");
+
+            for (let i=0; i < result["trips"].length; i++) {
+                trip = result["trips"][i]
+
+                var div = document.createElement('div');
+                div.className = "trip mt-4";
+
+                if (trip["description"]) var description = trip['description']
+                else var description = "Описание отсутсвует"
+
+                div.innerHTML = `
+                <div class="card mx-md-0 mx-sm-3">
+                    <div class="card-header">
+                    <h4 class="text-dark" style="float: right;">${trip['trip_date']} ${trip['trip_time']}</h4>
+                    <h3>Поездка</h3>
+                    </div>
+                    <div class="card-body">
+                        <p><b>Откуда: </b>${trip['from_address']}</p>
+                        <p><b>Куда: </b>${trip['to_address']}</p>
+                        <p><b>Пассажиров: </b>${trip['max_passengers_amount']}</p>
+                        <p class="text-secondary">
+                            ${description}
+                        </p>
+                    </div>
+                </div>`;
+
+                document.getElementById("trips_list").appendChild(div)
+            }
+
+            if (page_status["next_page"]==result["pages"] + 1) {
+                load_button.setAttribute("hidden", true);
+                document.getElementById("endhistory").removeAttribute("hidden")
+            }
+
+        }
+    </script>
     <!-- Блок скрипта для выделения иконки в меню -->
     <script>    
         var link = document.getElementById("drive_link");

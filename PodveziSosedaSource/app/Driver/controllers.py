@@ -1,13 +1,13 @@
-from flask import Blueprint, render_template, redirect,request, session, flash
-from flask.helpers import url_for
+from flask import Blueprint, render_template, redirect,request, session, flash, make_response, url_for
 from flask_login import login_required, current_user
+import json
 
 from datetime import date, timedelta, datetime
 
 from app.models import db, Users, Profiles, Trips
 from app.utils.utils import confirm_required
 from app.utils.geoloc import get_geocode_osm, gd_distance
-
+from .alchemyToJSON import AlchemyEncoder
 
 driver = Blueprint('driver', __name__, url_prefix ='/drive')
 
@@ -284,9 +284,24 @@ def active_trips():
     return render_template("Driver/active_trips.html", trips=actual_trips, days=days)
 
 
-@driver.route("/history", methods=["GET"])
+@driver.route("/history", methods=["GET", "POST"])
 @confirm_required
 @login_required
 def history():
-    # Пагинация
-    return render_template("Driver/history.html")
+    # Пагинация (бесконечный скролл)
+    POSTS_ON_PAGE = 3
+
+    if request.method == "POST":
+        req = request.get_json()
+        more_history = Trips.query.filter(Trips.driver_id == current_user.get_id(), Trips.trip_date<datetime.now().date()) \
+                                .order_by(Trips.trip_date.desc())
+        paginated_history = more_history.paginate(req['next_page'], POSTS_ON_PAGE, False).items
+        total_pages = more_history.count() // POSTS_ON_PAGE + 1
+        
+        resp = make_response(json.dumps({ "trips": paginated_history, "pages": total_pages }, cls=AlchemyEncoder))
+
+        return resp
+
+    history = Trips.query.filter(Trips.driver_id == current_user.get_id(), Trips.trip_date<datetime.now().date()) \
+                                .order_by(Trips.trip_date.desc()).paginate(1, POSTS_ON_PAGE, False).items
+    return render_template("Driver/history.html", trips=history)
