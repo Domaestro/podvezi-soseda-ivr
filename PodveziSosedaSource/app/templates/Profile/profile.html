@@ -8,7 +8,7 @@
     <div class="content">
         <div class = "ava-desc">
             <div class="avatar-block">
-                <img src="{{ url_for('profiles.load_avatar') }}" id = "avatar" class="img-thumbnail rounded" />
+                <img src="{{ url_for('profiles.load_avatar') }}" loading="lazy" id = "avatar" class="img-thumbnail rounded"/>
                 <h2>{{ name }}</h2>
             </div>
             <div class="description">
@@ -39,6 +39,7 @@
             </p>
         </div>
         <span id = "logout-btn"><a href="{{ url_for('auth.logout') }}" class="btn btn-light">Выйти из профиля</a></span>
+        <br>
     </div>
 {% endblock %}
 

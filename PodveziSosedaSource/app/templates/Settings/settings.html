@@ -54,7 +54,7 @@
 
             <div class="card-body media align-items-center">
               <div class="d-flex flex-row">
-                <img src="{{ url_for('profiles.load_avatar') }}" alt="" class="d-block ui-w-80">
+                <img src="{{ url_for('profiles.load_avatar') }}" loading="lazy" alt="" class="d-block ui-w-80">
                 
                 <div class="media-body" style="margin-left: 10px;">
                   <form action="{{ url_for('settings.upload') }}" method="POST" enctype="multipart/form-data">
