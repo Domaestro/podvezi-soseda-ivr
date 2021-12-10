@@ -6,12 +6,6 @@ from config import Config
 from app.models import Users
 from .sendEmail import send_link
 
-# Класс и переменная для хранения и передачи данными между представлениями
-# class cur_user(object):
-#     email=None
-#     place=None
-
-
 
 secure_token = URLSafeTimedSerializer(Config.SECRET_KEY) # Переменная для генерации токена подтверждения email
 
@@ -31,6 +25,6 @@ def confirm_required(func):
                 session['email'] = email # cur_user.email = email
                 return redirect(url_for('confirmEmail.confirm_letter'))
         except AttributeError:
-            flash('Войдите для доступа к закрытым страницам', 'error')
+            # flash('Войдите для доступа к закрытым страницам', 'error')
             return redirect(url_for('auth.login'))
     return wrapper

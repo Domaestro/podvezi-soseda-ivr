@@ -58,11 +58,12 @@
                 
                 <div class="media-body" style="margin-left: 10px;">
                   <form action="{{ url_for('settings.upload') }}" method="POST" enctype="multipart/form-data">
-                    <label class="btn btn-secondary btn-sm mt-4">
-                      Выбрать новую фотографию
+                    <p>Выберите новую фотографию:</p>
+                    <label class="btn btn-secondary btn-sm">
+                      Выбрать
                       <input type="file" name="file" class="account-settings-fileinput">
                     </label> &nbsp;
-                    <input type="button" class="btn btn-primary btn-sm mt-4" data-bs-toggle="modal" data-bs-target="#changeConfirmModal" value="Загрузить">
+                    <input type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#changeConfirmModal" value="Загрузить">
        
                      <!-- Модальное окно подтверждения -->
                      <div class="modal fade" id="changeConfirmModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -202,7 +203,7 @@
                   <textarea name="desc" class="form-control" id="descArea" rows="5">{% if description %}{{ description }}{% endif %}</textarea>
                 </div>
                 <!-- <input type="button" class="btn btn-primary btn-sm mt-3 mb-4" data-bs-toggle="modal" data-bs-target="#changeDescriptionModal" value="Сохранить"> -->
-                <button type="submit" class="btn btn-primary">Сохранить</button>
+                <button type="submit" class="btn btn-sm btn-primary mt-3">Сохранить</button>
                 <!-- Модальное окно подтверждения
                 <div class="modal fade" id="changeDescriptionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                    <div class="modal-dialog modal-dialog-centered">

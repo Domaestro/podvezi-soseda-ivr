@@ -279,9 +279,63 @@ def create_trip_by_force():
 def active_trips():
     actual_trips = Trips.query.filter(Trips.driver_id == current_user.get_id(), Trips.trip_date>=datetime.now().date()) \
                                 .order_by(Trips.trip_date).all()
-    days_possible=["Сегодня", "Завтра", "Послезавтра"]
-    days=[days_possible[actual_trips[i].trip_date.day-datetime.now().date().day] for i in range(len(actual_trips))]
+    days_possible = ["Сегодня", "Завтра", "Послезавтра"]
+    days = [days_possible[actual_trips[i].trip_date.day - datetime.now().date().day] for i in range(len(actual_trips))]
     return render_template("Driver/active_trips.html", trips=actual_trips, days=days)
+
+
+@driver.route("/trip/<trip_id>", methods=["GET"])
+@login_required
+def trip(trip_id):
+    trip = Trips.query.filter(Trips.driver_id == current_user.get_id(), Trips.trip_id==trip_id) \
+                .first_or_404()
+
+    future_trip = None
+
+    if trip.trip_date>=datetime.now().date():
+        date = ["Сегодня", "Завтра", "Послезавтра"][trip.trip_date.day-datetime.now().date().day]
+        future_trip = True
+    else:
+        date = trip.trip_date.strftime(r"%d.%m.%Y")
+        future_trip = False
+
+    passengers = {}
+    if trip.passengers_ids:
+        for p_id in trip.passengers_ids:
+            user = Users.query.filter(Users.id==p_id).first()
+            passengers[p_id] = f'{user.first_name} {user.second_name}'
+    
+    return render_template("Driver/trip_full_info.html", trip=trip, date=date, passengers=passengers, future=future_trip)
+
+
+@driver.route("/trip/change/<trip_id>", methods=["GET", "POST"])
+@login_required
+def change(trip_id):    
+    trip = Trips.query.filter(Trips.driver_id == current_user.get_id(), Trips.trip_id==trip_id, Trips.trip_date>=datetime.now().date()) \
+                .first_or_404()
+
+    if request.method == "POST":
+        new_description = request.form["tripDescription"]
+
+        try:
+            trip.description = new_description
+            db.session.commit()
+            flash("Описание поездки обновлено", "success")
+        except:
+            db.session.rollback()
+            flash("Ошибка", "error")
+
+        return redirect(url_for("driver.drive"))
+
+    date = ["Сегодня", "Завтра", "Послезавтра"][trip.trip_date.day-datetime.now().date().day]
+
+    passengers = {}
+    if trip.passengers_ids:
+        for p_id in trip.passengers_ids:
+            user = Users.query.filter(Users.id==p_id).first()
+            passengers[p_id] = f'{user.first_name} {user.second_name}'
+    
+    return render_template("Driver/trip_change.html", trip=trip, date=date, passengers=passengers)
 
 
 @driver.route("/history", methods=["GET", "POST"])

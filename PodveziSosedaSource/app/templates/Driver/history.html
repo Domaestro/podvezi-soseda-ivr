@@ -39,6 +39,7 @@
                                     Описание отсутсвует
                                 {% endif %}
                             </p>
+                            <a href="{{ url_for('driver.trip', trip_id=trips[i].trip_id) }}" class="btn btn-secondary btn-sm mx-2 shadow-none" style="float: right;">Подробнее</a>
                         </div>
                     </div>
                 </div>
@@ -94,6 +95,8 @@
                 if (trip["description"]) var description = trip['description']
                 else var description = "Описание отсутсвует"
 
+                var more = `/drive/trip/${trip['trip_id']}`
+
                 div.innerHTML = `
                 <div class="card mx-md-0 mx-sm-3">
                     <div class="card-header">
@@ -107,6 +110,7 @@
                         <p class="text-secondary">
                             ${description}
                         </p>
+                        <a href="${more}" class="btn btn-secondary btn-sm mx-2 shadow-none" style="float: right;">Подробнее</a>
                     </div>
                 </div>`;
 

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block css_style %}
+
+{% endblock %}
+
+{% block content %}
+    <h1>Поездки рядом с вами:</h1>
+
+{% endblock %}
+
+{% block script %}
+    <!-- Блок скрипта для выделения иконки в меню -->
+    <script>    
+        var link = document.getElementById("join_link");
+        link.classList.add("nav__link--active");
+    </script>
+
+    <!-- Тост -->
+    <script>
+        var option = {
+            animation: true,
+            delay: 3000
+        }
+        function showToast() {
+            let toastAlert = document.getElementById("infoToast")
+            let bsAlert = new bootstrap.Toast(toastAlert, option)
+            bsAlert.show()
+        }
+        window.onload = showToast()
+        </script>
+    
+    <script>
+    // При большом экране изменим раположени тоста
+    if (window.innerWidth >= 767) {
+        var toastCont = document.getElementById("toastDiv")
+        toastCont.classList.remove("start-50", "translate-middle-x")
+        toastCont.classList.add("end-0")
+    }
+    </script>
+{% endblock %}

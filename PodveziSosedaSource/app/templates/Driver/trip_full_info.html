@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block css_style %}
+
+{% endblock %}
+
+{% block content %}
+<h1 class="mt-5 mx-2">Обзор поездки</h1>
+
+<div class="trip mt-4 mx-2">
+    <div class="card mx-md-0">
+        <div class="card-header">
+        <h4 class="text-dark" style="float: right;">{{ date }} {{ trip.trip_time.strftime("%H:%M") }}</h4>
+        <h3>Поездка</h3>
+        </div>
+        <div class="card-body">
+            <p><b>Откуда: </b>{{ trip.from_address }}</p>
+            <p><b>Куда: </b>{{ trip.to_address }}</p>
+            <p><b>Максимальное число пассажиров: </b>{{ trip.max_passengers_amount }}</p>
+            <p><b>Пассажиры:</b>
+            {% if not trip.passengers_ids %}
+                <span class="text-muted">отсутсвуют</span>
+            {% else %}
+                {% for p in trip.passengers_ids %}
+                    <div style="display: flex; flex-direction: row;">
+                        <a href="{{ url_for('profiles.user', user_id=p) }}">{{ passengers[p] }}</a>
+                    </div>    
+                {{ passenger }}
+                {% endfor %}
+            {% endif %}
+            </p>
+            <p class="text-secondary">
+                {% if trip.description %}
+                    {{ trip.description }}
+                {% else %}
+                    Описание отсутсвует
+                {% endif %}
+            </p>
+        </div>
+        {% if future %}
+            <div class="text-center">
+                <a href="{{ url_for('driver.change', trip_id=trip.trip_id) }}" class="btn btn-secondary mb-2 mx-2 shadow-none">Редактировать</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<a onclick="javascript:history.back(); return false;" class="btn btn-secondary mx-2 mt-4">Назад</a>
+
+<br class="mb-5"/><br class="mb-5"/><br>
+{% endblock %}
+
+{% block script %}
+    <!-- Блок скрипта для выделения иконки в меню -->
+    <script>    
+        var link = document.getElementById("drive_link");
+        link.classList.add("nav__link--active");
+    </script>
+{% endblock %}

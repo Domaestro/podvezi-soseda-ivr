@@ -21,7 +21,7 @@
     <h1 class="mt-5">Активные поездки</h1>
     {% if trips %}
         {% for i in range(trips|length) %}
-            <div class="trip mt-4">
+            <div class="trip mt-4 mx-1">
                 <div class="card mx-md-0 mx-sm-3">
                     <div class="card-header">
                     <h4 class="text-dark" style="float: right;">{{ days[i] }} {{ trips[i].trip_time.strftime("%H:%M") }}</h4>
@@ -32,8 +32,8 @@
                         <p><b>Куда: </b>{{ trips[i].to_address }}</p>
                         <p><b>Пассажиров: </b>{{ trips[i].max_passengers_amount }}</p>
                         <div style="float: right; display: flex; flex-direction: column;">
-                            <a href="" class="btn btn-primary btn-sm mx-2 mb-1 shadow-none" >Подробнее</a>
-                            <a href="" class="btn btn-secondary btn-sm mx-2 shadow-none">Редактировать</a>
+                            <a href="{{ url_for('driver.trip', trip_id=trips[i].trip_id) }}" class="btn btn-primary btn-sm mx-2 mb-1 shadow-none" >Подробнее</a>
+                            <a href="{{ url_for('driver.change', trip_id=trips[i].trip_id) }}" class="btn btn-secondary btn-sm mx-2 shadow-none">Редактировать</a>
                         </div>
                         <p class="text-secondary">
                             {% if trips[i].description %}

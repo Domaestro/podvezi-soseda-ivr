@@ -23,7 +23,7 @@
 
     <h1>Водитель</h1>
 
-    <a href="{{ url_for('driver.setup_drive') }}" class="btn btn-md btn- btn-primary create-trip">Создать поездку</a>
+    <a href="{{ url_for('driver.setup_drive') }}" class="btn btn-md btn-primary create-trip shadow-none">Создать поездку</a>
     
     <div class="content">
         <div class="blocks">
@@ -52,7 +52,7 @@
                             <div class="mx-1">
                                 <p><b>Откуда: </b>{{ trips[i].from_address }}</p>
                                 <p><b>Куда: </b>{{ trips[i].to_address }}</p>
-                                <a href="" class="btn btn-secondary btn-sm mx-2 shadow-none" style="float: right;">Подробнее</a>
+                                <a href="{{ url_for('driver.trip', trip_id=trips[i].trip_id) }}" class="btn btn-secondary btn-sm mx-2 shadow-none" style="float: right;">Подробнее</a>
                                 <p class="text-secondary">
                                     {% if trips[i].description %}
                                         {{ trips[i].description }}
@@ -84,7 +84,7 @@
                         <div class="mx-1">
                             <p><b>Откуда: </b>{{ history[i].from_address }}</p>
                             <p><b>Куда: </b>{{ history[i].to_address }}</p>
-                            <a href="" class="btn btn-secondary btn-sm mx-2 shadow-none" style="float: right;">Подробнее</a>
+                            <a href="{{ url_for('driver.trip', trip_id=history[i].trip_id) }}" class="btn btn-secondary btn-sm mx-2 shadow-none" style="float: right;">Подробнее</a>
                             <p class="text-secondary">
                                 {% if history[i].description %}
                                     {{ history[i].description }}

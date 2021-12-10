@@ -11,6 +11,7 @@ import app.ConfirmEmail.controllers as confirmEmailModule
 import app.Profile.controllers as profileModule
 import app.Settings.controllers as settingsModule
 import app.Driver.controllers as driverModule
+import app.Passenger.controllers as passengerModule
 
 
 def create_app():
@@ -31,6 +32,7 @@ def create_app():
     app.register_blueprint(profileModule.profiles)
     app.register_blueprint(settingsModule.settings_module)
     app.register_blueprint(driverModule.driver)
+    app.register_blueprint(passengerModule.passenger)
 
     # Устанавливаем логин менеджер
     authModule.login_manager.init_app(app)
