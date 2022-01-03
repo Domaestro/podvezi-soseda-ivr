@@ -33,7 +33,7 @@ class Trips(db.Model):
     __tablename__ = 'trips'
     trip_id = db.Column(db.Integer, primary_key=True)
     driver_id = db.Column(db.Integer)
-    passengers_ids = db.Column(db.ARRAY(db.Integer))
+    passengers_ids = db.Column(db.ARRAY(db.Integer), default = [])
     max_passengers_amount = db.Column(db.Integer, default=2)
 
     from_address = db.Column(db.String)    

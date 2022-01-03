@@ -1,15 +1,151 @@
 {% extends 'base.html' %}
 
 {% block css_style %}
+<style>
+    .pbutton {
 
+    }
+    .trip_type {
+        display: none;
+    }
+
+    /* На большом экране*/
+    @media (min-width: 767px) {
+        .trip_type {
+            display:inline;
+        }
+    }
+</style>
 {% endblock %}
 
 {% block content %}
-    <h1>Поездки рядом с вами:</h1>
+    <div class="p-2">
+        <h1>Поездки рядом с вами:</h1>
+
+        {% if trips %}
+            <div id="trips_list">
+                {% for trip in trips %}
+                    <div class="trip" style="max-width: 1000px;">
+                        <div class="border rounded mt-3 shadow-sm">
+                            <div class="head rounded text-muted p-2 pb-2" style="background-color: rgb(232, 249, 255);">
+                                <span class="text-dark" style="font-size: 22px;"><a href="{{ url_for('profiles.user', user_id=trip['driver_id']) }}" class="text-link text-decoration-none">{{ trip["driver_name"] }}</a> <span class="trip_type">едет {{ trip["trip_type"] }}</span> </span>
+                                <span class="text-dark" style="float: right; font-size: 22px;">{{ trip["day"] }} {{ trip["time"] }}</span>
+                            </div>
+                            <div class="mx-1 p-2">
+                                <p><b>Откуда: </b>{{ trip["from"] }}</p>
+                                <p><b>Куда: </b>{{ trip["to"] }}</p>
+                                <span><b>Пассажиры:</b>
+                                    <!-- <a href="">первый</a>, <a href="">второй</a> -->
+                                    {% if trip["passengers"]|length != 0 %}
+                                        {% for id, name in trip["passengers"].items() %}
+                                            <a href="{{ url_for('profiles.user' ,user_id=id) }}" class="rounded mx-1 px-1 link" style="background-color: rgb(232, 249, 255);text-decoration: none;">{{ name }}</a> 
+                                        {% endfor %}
+                                    {% else %}
+                                        <span class="text-muted">станьте первым пассажиром</span>
+                                    {% endif %}
+                                </span>
+                                <p class="text-secondary" style="max-width: 700px;">
+                                    {{ trip["description"] }}
+                                </p>
+                                <div class="text-end">
+                                    <a href="" class="btn btn-primary mx-2 shadow-none pbutton">Подвези!</a>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div style="max-width: 1000px;">
+                <div class="text-center mt-5">
+                    <button id="lmbtn" class="btn btn-secondary shadow-none btn-lg" onclick="load_more()">
+                        <span id="spinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" hidden></span>
+                        <span class="sr-only">Загрузить еще</span>
+                    </button>
+                    <p id = "endhistory" class="text-muted mt-3 mb-3" hidden>Это все ваши поездки</p>
+                </div>
+            </div>
+        {% else %}
+            <h3 class="text-muted mt-3 mb-3">Нет поездок рядом</h3>
+        {% endif %}
+        <br class="mb-5"/><br class="mb-5"/><br>
+    </div>
 
 {% endblock %}
 
 {% block script %}
+    <!-- Бесконечный скролл -->
+    <script>
+        let page_status = {
+            next_page: 2
+        }
+
+        async function load_more() {
+            spin = document.getElementById("spinner");
+            spin.removeAttribute("hidden")
+            load_button = document.getElementById("lmbtn")
+            load_button.setAttribute("disabled", true);
+            
+            let response = await fetch('{{ url_for("passenger.join") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(page_status)
+            });
+            
+            page_status["next_page"]++;
+
+            let result = await response.json();
+
+            spin.setAttribute("hidden", true);
+            load_button.removeAttribute("disabled");
+
+            for (let i=0; i < result["trips"].length; i++) {
+                trip = result["trips"][i]
+
+                var div = document.createElement('div');
+                div.className = "trip mt-4";
+
+                if (trip["description"]) var description = trip['description']
+                else var description = "Описание отсутсвует"
+
+                div.innerHTML = `
+                <div class="trip" style="max-width: 1000px;">
+                    <div class="border rounded mt-3 shadow-sm">
+                        <div class="head rounded text-muted p-2 pb-2" style="background-color: rgb(232, 249, 255);">
+                            <span class="text-dark" style="font-size: 22px;"><a href="/profile/${trip['driver_id']}" class="text-link text-decoration-none">${trip["driver_name"]}</a> <span class="trip_type">едет ${trip["trip_type"]}</span> </span>
+                            <span class="text-dark" style="float: right; font-size: 22px;">${ trip["day"] } ${ trip["time"] }</span>
+                        </div>
+                        <div class="mx-1 p-2">
+                            <p><b>Откуда: </b>${ trip["from"] }</p>
+                            <p><b>Куда: </b>${ trip["to"] }</p>
+                            <span><b>Пассажиры:</b>
+
+                            </span>
+                            <p class="text-secondary" style="max-width: 700px;">
+                                ${trip["description"]}
+                            </p>
+                            <div class="text-end">
+                                <a href="" class="btn btn-primary mx-2 shadow-none pbutton">Подвези!</a>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>`;
+
+                document.getElementById("trips_list").appendChild(div)
+            }
+
+            if (page_status["next_page"]==result["pages"] + 1) {
+                load_button.setAttribute("hidden", true);
+                document.getElementById("endhistory").removeAttribute("hidden")
+            }
+
+        }
+    </script>
+
     <!-- Блок скрипта для выделения иконки в меню -->
     <script>    
         var link = document.getElementById("join_link");

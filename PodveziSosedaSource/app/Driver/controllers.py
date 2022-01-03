@@ -16,15 +16,15 @@ driver = Blueprint('driver', __name__, url_prefix ='/drive')
 @confirm_required
 @login_required
 def drive():
-    first_3_actual_trips = Trips.query.filter(Trips.driver_id == current_user.get_id(), Trips.trip_date>=datetime.now().date()) \
+    first_2_actual_trips = Trips.query.filter(Trips.driver_id == current_user.get_id(), Trips.trip_date>=datetime.now().date()) \
                                 .order_by(Trips.trip_date).limit(2).all()
     days_possible=["Сегодня", "Завтра", "Послезавтра"]
-    days=[days_possible[first_3_actual_trips[i].trip_date.day-datetime.now().date().day] for i in range(len(first_3_actual_trips))]
+    days=[days_possible[first_2_actual_trips[i].trip_date.day-datetime.now().date().day] for i in range(len(first_2_actual_trips))]
 
-    last_3_in_history = Trips.query.filter(Trips.driver_id == current_user.get_id(), Trips.trip_date<datetime.now().date()) \
+    last_2_in_history = Trips.query.filter(Trips.driver_id == current_user.get_id(), Trips.trip_date<datetime.now().date()) \
                                 .order_by(Trips.trip_date.desc()).limit(2).all()
 
-    return render_template("Driver/driver.html", trips=first_3_actual_trips, days=days, history=last_3_in_history)
+    return render_template("Driver/driver.html", trips=first_2_actual_trips, days=days, history=last_2_in_history)
 
 
 @driver.route('/setup', methods=["GET", "POST"])
