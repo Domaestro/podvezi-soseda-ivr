@@ -5,6 +5,7 @@ from itsdangerous import SignatureExpired
 from app.models import db, Users
 from app.utils.utils import confirm_required, secure_token
 
+
 confirmEmail = Blueprint('confirmEmail', __name__, url_prefix ='/confirm_email')
 
 

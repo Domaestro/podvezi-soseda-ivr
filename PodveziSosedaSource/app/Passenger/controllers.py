@@ -33,6 +33,7 @@ def join():
         if gd_distance( (trp.from_latitude, trp.from_longitude ), (home_lati, home_long) ) < 0.6 or \
             gd_distance( (trp.to_latitude, trp.to_longitude ), (home_lati, home_long) ) < 0.6:
                 vtrip = {
+                    "trip_id": trp.trip_id,
                     "driver_id": trp.driver_id,
                     "driver_name": f"{driver.first_name}", #{driver.second_name}",
                     "trip_type": "домой" if (drvr_prfl.home_latitude == trp.to_latitude and drvr_prfl.home_longitude == trp.to_longitude) else "в город",
@@ -56,3 +57,22 @@ def join():
         return resp
 
     return render_template("Passenger/join.html", trips=valid_trips[0:POSTS_ON_PAGE])
+
+
+@passenger.route("/<trip_id>", methods=["GET", "POST"])
+@login_required
+def join_trip(trip_id):
+    trip = Trips.query.filter(Trips.trip_id==trip_id).first()
+    print(trip.passengers_ids, current_user.get_id())
+    if current_user.get_id() in trip.passengers_ids:
+        flash("Вы уже присоединилсь к этой поездке", "error")
+    else:
+        try:
+            trip.passengers_ids = [*trip.passengers_ids, current_user.get_id()]
+            flash("Вы успешно присоединились к поездке", "success")
+            db.session.flush()
+            db.session.commit()
+        except:
+            flash("Произошла ошибка", "error")
+            db.session.rollback()
+    return redirect(url_for("passenger.join"))

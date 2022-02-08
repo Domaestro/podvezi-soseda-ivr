@@ -13,11 +13,45 @@
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@latest/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> <!--Гугл шрифт-иконки-->
+    <!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> Гугл шрифт-иконки -->
 
     <script src="https://unpkg.com/leaflet@latest/dist/leaflet-src.js"></script>
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     <style type="text/css">
+      @font-face {
+        font-family: 'Material Icons';
+        font-style: normal;
+        font-weight: 400;
+        src: url(https://example.com/MaterialIcons-Regular.eot); 
+        src: local('Material Icons'),
+          local('MaterialIcons-Regular'),
+          url(../../static/fonts/MaterialIcons-Regular.woff2) format('woff2'),
+          url(../../static/fonts/MaterialIcons-Regular.ttf) format('truetype');
+      }
+
+      .material-icons {
+        font-family: 'Material Icons';
+        font-weight: normal;
+        font-style: normal;
+        font-size: 24px;
+        display: inline-block;
+        line-height: 1;
+        text-transform: none;
+        letter-spacing: normal;
+        word-wrap: normal;
+        white-space: nowrap;
+        direction: ltr;
+
+        /* Support for all WebKit browsers. */
+        -webkit-font-smoothing: antialiased;
+        /* Support for Safari and Chrome. */
+        text-rendering: optimizeLegibility;
+        /* Support for Firefox. */
+        -moz-osx-font-smoothing: grayscale;
+        /* Support for IE. */
+        font-feature-settings: 'liga';
+      }
+
       body {
         margin: 0;
         font-family: sans-serif;

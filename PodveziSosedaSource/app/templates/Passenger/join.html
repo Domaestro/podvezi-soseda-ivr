@@ -2,9 +2,14 @@
 
 {% block css_style %}
 <style>
-    .pbutton {
-
+    .success {
+    background-color: rgb(56, 167, 56);
     }
+
+    .error {
+        background-color: rgb(204, 59, 59);
+    }
+    
     .trip_type {
         display: none;
     }
@@ -19,6 +24,20 @@
 {% endblock %}
 
 {% block content %}
+    {% for cat, msg in get_flashed_messages(True) %}
+        <div id="toastDiv" class="position-fixed top-30 start-50 translate-middle-x p-3" style="z-index: 12">
+        <div id="infoToast" class="toast hide text-white {{cat}} border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+            <strong class="me-auto">Информация</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+            {{msg}}
+            </div>
+        </div>
+        </div>
+    {% endfor %}    
+
     <div class="p-2">
         <h1>Поездки рядом с вами:</h1>
 
@@ -48,7 +67,7 @@
                                     {{ trip["description"] }}
                                 </p>
                                 <div class="text-end">
-                                    <a href="" class="btn btn-primary mx-2 shadow-none pbutton">Подвези!</a>
+                                    <a href="{{ url_for('passenger.join_trip', trip_id = trip['trip_id']) }}" class="btn btn-primary mx-2 shadow-none pbutton">Подвези!</a>
                                 </div>
                                 
                             </div>
@@ -128,7 +147,7 @@
                                 ${trip["description"]}
                             </p>
                             <div class="text-end">
-                                <a href="" class="btn btn-primary mx-2 shadow-none pbutton">Подвези!</a>
+                                <a href="${ url_for('passenger.join_trip', trip_id = trip['trip_id']) }" class="btn btn-primary mx-2 shadow-none pbutton">Подвези!</a>
                             </div>
                             
                         </div>
@@ -164,7 +183,7 @@
             bsAlert.show()
         }
         window.onload = showToast()
-        </script>
+    </script>
     
     <script>
     // При большом экране изменим раположени тоста
