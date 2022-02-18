@@ -52,14 +52,14 @@
             <label for="floatingInput">Email</label>
             </div>
             <div class="form-floating">
-            <input type="tel" class="form-control" id="floatingPhone" name="phoneNum" placeholder="name@example.com" required>
+            <input type="tel" class="form-control" id="floatingPhone" name="phoneNum" placeholder="" pattern="^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$" required>
             <label for="floatingInput">Телефон</label>
             </div>
             <div class="form-floating">
             <input type="password" class="form-control" id="floatingPassword" name="psw" placeholder="Password" required>
             <label for="floatingPassword">Пароль</label>
             </div>
-            <button class="w-100 btn btn-lg btn-primary" type="submit" id="regBtn">Регистрация</button>
+            <button class="w-100 btn btn-lg btn-primary shadow-none" type="submit" id="regBtn">Регистрация</button>
             <br/><br/>
             <a href="{{ url_for('.login') }}" class ="switch_auth">Уже есть аккаунт? - Войдите</a>
         </form>

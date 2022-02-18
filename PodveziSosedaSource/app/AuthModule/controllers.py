@@ -29,7 +29,12 @@ def register():
         return redirect("/profile")
 
     if request.method == "POST":
-        # здесь должна быть проверка корректности введенных данных
+        # Проверка пароля на сложность
+        if len(request.form['psw']) < 5:
+             flash('Пароль должен быть длиннее пяти символов', category = 'error')
+             return render_template("Auth/register.html", title="Регистрация")
+
+        # Создание нового пользователя
         try:
             hash = generate_password_hash(request.form['psw'])
             email = request.form['email']
