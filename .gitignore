@@ -21,6 +21,13 @@ include/*
 
 env/
 
+.project
+.pydevproject
+.metadata/
+.metadata/*
+
+aguber_application.md
+
 PodveziSosedaSource/set-env.sh
 PodveziSosedaSource/migrations/
 PodveziSosedaSource/migrations/*
