@@ -39,13 +39,13 @@
         </div>
         {% if future %}
             <div class="text-center">
-                <a href="{{ url_for('driver.change', trip_id=trip.trip_id) }}" class="btn btn-secondary mb-2 mx-2 shadow-none">Редактировать</a>
+                <a href="{{ url_for('driver.change', trip_id=trip.trip_id) }}" class="btn btn-secondary mb-2 mx-2 shadow-none"><i class="material-icons but-icon">edit</i>Редактировать</a>
             </div>
         {% endif %}
     </div>
 </div>
 
-<a onclick="javascript:history.back(); return false;" class="btn btn-secondary mx-2 mt-4">Назад</a>
+<a onclick="javascript:history.back(); return false;" class="btn btn-secondary mx-2 mt-4"><i class="material-icons but-icon">arrow_back</i>Назад</a>
 
 <br class="mb-5"/><br class="mb-5"/><br>
 {% endblock %}

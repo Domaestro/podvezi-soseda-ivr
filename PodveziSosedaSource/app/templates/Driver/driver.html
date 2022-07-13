@@ -23,7 +23,7 @@
 
     <h1>Водитель</h1>
 
-    <a href="{{ url_for('driver.setup_drive') }}" class="btn btn-md btn-primary create-trip shadow-none">Создать поездку</a>
+	<a href="{{ url_for('driver.setup_drive') }}" class="btn btn-md btn-primary create-trip shadow-none">Создать поездку</a>
     
     <div class="content">
         <div class="blocks">
@@ -64,7 +64,7 @@
                         </div>
                     {% endfor %}
                     <div class="text-center">
-                        <a href="{{ url_for('driver.active_trips') }}" class="btn btn-primary shadow-none mt-3">Посмотреть все</a>
+                       <a href="{{ url_for('driver.active_trips') }}" class="btn btn-primary shadow-none mt-3"> <i class="material-icons but-icon">keyboard_double_arrow_down</i>  Посмотреть все</a>
                     </div>
                 {% else %}
                     <p class="text-muted mt-3">Нет активных поездок</p>
@@ -96,18 +96,18 @@
                     </div>
                 {% endfor %}
                 <div class="text-center">
-                    <a href="{{ url_for('driver.history') }}" class="btn btn-primary shadow-none mt-3">Посмотреть все</a>
+                    <a href="{{ url_for('driver.history') }}" class="btn btn-primary shadow-none mt-3">  <i class="material-icons but-icon" >keyboard_double_arrow_down  </i>  Посмотреть все</a>
                 </div>
                 {% else %}
                     <p class="text-muted mt-3">Нет истории</p>
                 {% endif %}
             </div>
         </div>
-        <div class="statistic p-3">
+        <!--<div class="statistic p-3">
             <h3 class="">Cтатистика:</h3>
             <p class="">Совершено поездок: </p>
             <p class="">Людей перевезено: </p>
-        </div>
+        </div> -->
     </div>
 {% endblock %}
 

@@ -15,8 +15,10 @@
                 <span id="Description" class = "infType">Описание: </span>
                 <p id="Description-text">
                     {% if not description %}
-                    <a href="{{ url_for('settings.settings') }}" class="btn btn-secondary">Добавьте</a>
-                    {% else %}
+					<span class="nav__cont">
+						<a href="{{ url_for('settings.settings') }}" class="btn btn-secondary"><i class="material-icons but-icon">post_add</i>Добавьте</a>
+					</span>
+					{% else %}
                         {{ description }}
                     {% endif %}
                 </p>
@@ -38,7 +40,9 @@
                 {% endif %}
             </p>
         </div>
-        <span id = "logout-btn"><a href="{{ url_for('auth.logout') }}" class="btn btn-light">Выйти из профиля</a></span>
+        <span id = "logout-btn" class="nav__cont" >
+			<a href="{{ url_for('auth.logout') }}" class="btn btn-light"><i class="material-icons but-icon">logout</i>Выйти из профиля</a>
+		</span>
         <br>
     </div>
 {% endblock %}

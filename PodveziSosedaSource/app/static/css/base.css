@@ -127,6 +127,13 @@ main {
     font-size: 18px;
 }
 
+
+.but-icon {
+	font-size: 14px;
+	margin-right: 5px;
+}
+
+
 /* На большом экране*/
 @media (min-width: 767px) {
     .site-identity {
