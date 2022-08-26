@@ -1,6 +1,6 @@
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-import smtplib
+import smtplib, ssl
 
 from config import Config
 
@@ -32,8 +32,10 @@ def send_link(link, to):
     '''
 
     msg.attach(MIMEText(template, 'html'))
-    server = smtplib.SMTP('smtp.gmail.com: 587')
-    server.starttls()
-    server.login(msg['From'], password)
-    server.sendmail(msg['From'], to, msg.as_string())
-    server.quit()
+
+    context = ssl.create_default_context()
+    #context = ssl._create_unverified_context() # на случай, если ssl-сертификат будет просрочен
+    with smtplib.SMTP_SSL("mail.kerpan.ru", 465, context=context) as server:
+        server.login(msg['From'], password)
+        server.sendmail(msg['From'], to, msg.as_string())
+        print('mail successfully sent')

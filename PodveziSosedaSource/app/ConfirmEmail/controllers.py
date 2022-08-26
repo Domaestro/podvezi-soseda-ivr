@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, session
 from flask_login import login_required, current_user
 from itsdangerous import SignatureExpired
 
-from app.models import db, Users
+from app.models import db, Users, Email_Confirm_Tokens
 from app.utils.utils import confirm_required, secure_token
 
 
@@ -12,8 +12,14 @@ confirmEmail = Blueprint('confirmEmail', __name__, url_prefix ='/confirm_email')
 @confirmEmail.route('/<token>')
 def confirm_email(token):
     try:
+        user_id = Email_Confirm_Tokens.query.filter(token==token).all()[-1].user_id
+        user_email = Users.query.filter(Users.id == user_id).first().email
+        if user_email != session["email"]:
+            return render_template("Confirm_Email/confirm_email_token.html", text="Токен недействителен", isOk=False)
+        Email_Confirm_Tokens.query.filter(token==token).all()[-1].used = True
+
         secure_token.loads(token, salt='email-confirm', max_age=600) # max_age - время жизни токена в секундах       
-        # Здесь делаем запись в бд, что пользователь подвердил адрес
+        #Здесь делаем запись в бд, что пользователь подвердил адрес
         print("Пользователь подтвердил email " + session["email"])
         Users.query.filter(Users.email == session["email"]).first().confirmed = True
         db.session.flush()

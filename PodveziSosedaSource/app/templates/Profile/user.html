@@ -11,7 +11,7 @@
             <div class="avatar-block">
                 <img src="{{ url_for('profiles.load_user_avatar', user_id=id) }}" id = "avatar" class="img-thumbnail rounded" />
                 <h2>{{ name }}</h2>
-                <button type="button" class="btn btn-light btn-rounded m-3"><i class="material-icons nav__icon mr-1 pd-0 fs-6" style="padding: 7px 6px;">chat</i>Написать</button>
+                <!-- <button type="button" class="btn btn-light btn-rounded m-3"><i class="material-icons nav__icon mr-1 pd-0 fs-6" style="padding: 7px 6px;">chat</i>Написать</button> -->
             </div>
             <div class="description">
                 <span id="Description" class = "infType">Описание: </span>
@@ -30,7 +30,7 @@
             </div>
             <p><span class = "infType">Email: </span>{{ email }}</p>
             <p><span class = "infType">Телефон: </span>{{ phone }}</p>
-            <p><span class = "infType">Подтвержден: </span>{{ confirmed }}</p>
+            <!-- <p><span class = "infType">Подтвержден: </span>{{ confirmed }}</p> -->
             <p><span class = "infType">Домашний адрес: </span>
                 {% if not address %}
                 <p class="text-muted">Пользователь не добавил адрес</p>

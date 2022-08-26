@@ -28,7 +28,7 @@ class Config(object):
 
 
     # Настройки для отправки писем подтверждения
-    domain = "http://127.0.0.1:5000"
+    domain = os.environ["SERVER_DOMAIN"]
     email_login = os.environ["EMAIL_LOGIN"]
     email_password = os.environ["EMAIL_PASSWORD"]
 

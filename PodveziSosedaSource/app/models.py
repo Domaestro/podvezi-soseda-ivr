@@ -48,3 +48,10 @@ class Trips(db.Model):
     trip_time = db.Column(db.Time)
 
     description = db.Column(db.Text, nullable=True)
+
+class Email_Confirm_Tokens(db.Model):
+    __tablename__ = 'email_confirm_tokens'
+    token_id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer)
+    token = db.Column(db.String)
+    used = db.Column(db.Boolean, default=False)

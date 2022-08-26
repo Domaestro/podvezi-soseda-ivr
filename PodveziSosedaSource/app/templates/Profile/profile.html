@@ -31,7 +31,7 @@
             </div>
             <p><span class = "infType">Email: </span>{{ email }}</p>
             <p><span class = "infType">Телефон: </span>{{ phone }}</p>
-            <p><span class = "infType">Подтвержден: </span>{{ confirmed }}</p>
+            <!-- <p><span class = "infType">Подтвержден: </span>{{ confirmed }}</p> -->
             <p><span class = "infType">Домашний адрес: </span>
                 {% if not address %}
                     <a href="{{ url_for('settings.settings') }}" class="btn btn-link">Добавьте</a>
