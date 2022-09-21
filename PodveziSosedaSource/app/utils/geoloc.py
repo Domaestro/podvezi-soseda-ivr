@@ -3,7 +3,7 @@ from geopy.distance import geodesic
 from config import Config
 
 
-nom = Nominatim(user_agent="podvezisoseda")
+nom = Nominatim(user_agent="podvezisoseda, school project")
 gv3 = GoogleV3(api_key=Config.api_key, domain='maps.google.ru')
 
 
@@ -16,7 +16,7 @@ def get_geocode_gv3(usplace):
 
 
 def get_geocode_osm(usplace):
-    '''Геокодер от нормальных ребят из osm, использовать в первую очередь'''
+    '''Геокодер osm, использовать в первую очередь'''
     try:
         return nom.geocode(usplace)
     except:

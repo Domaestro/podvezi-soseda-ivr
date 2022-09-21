@@ -26,12 +26,16 @@ def join():
     profile = Profiles.query.filter(Profiles.user_id == current_user.get_id()).first()
     home_lati = profile.home_latitude
     home_long = profile.home_longitude
+
+    # В каком радиусе искать поездки (км)
+    TRIP_RADIUS = profile.trip_search_radius
+
     valid_trips = []
     for trp in trips:
         driver = Users.query.filter(Users.id==trp.driver_id).first()
         drvr_prfl = Profiles.query.filter(Users.id==trp.driver_id).first()
-        if gd_distance( (trp.from_latitude, trp.from_longitude ), (home_lati, home_long) ) < 0.6 or \
-            gd_distance( (trp.to_latitude, trp.to_longitude ), (home_lati, home_long) ) < 0.6:
+        if gd_distance( (trp.from_latitude, trp.from_longitude ), (home_lati, home_long) ) <= TRIP_RADIUS or \
+            gd_distance( (trp.to_latitude, trp.to_longitude ), (home_lati, home_long) ) <= TRIP_RADIUS:
                 vtrip = {
                     "trip_id": trp.trip_id,
                     "driver_id": trp.driver_id,

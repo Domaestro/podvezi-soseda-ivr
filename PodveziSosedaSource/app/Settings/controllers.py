@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from app.models import db, Users, Profiles
-from app.utils.geoloc import get_geocode_gv3
+from app.utils.geoloc import get_geocode_gv3, get_geocode_osm
 
 
 settings_module = Blueprint('settings', __name__, url_prefix ='/settings')
@@ -111,7 +111,8 @@ def upload_desc():
 def address_confirm():
     if request.method == 'POST':
         place = request.form["place"]
-        location = get_geocode_gv3(place)
+        #location = get_geocode_gv3(place) # определить адрес, используя Google
+        location = get_geocode_osm(place) # определить адрес, используя Nominatim (Свободная лицензия, возможность установить на свой сервер)
         session["place"] = place
         if location:
             return render_template("Settings/address-confirm.html", address=location.address)
@@ -126,7 +127,8 @@ def address_confirm():
 def address_upload():
     if request.method == 'POST':
         place = session["place"]
-        location = get_geocode_gv3(place)
+        #location = get_geocode_gv3(place) # определить адрес, используя Google
+        location = get_geocode_osm(place) # определить адрес, используя Nominatim (Свободная лицензия, возможность установить на свой сервер)
         print("Адрес"+location.address)
         if location:
             try:

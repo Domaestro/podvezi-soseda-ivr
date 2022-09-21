@@ -24,6 +24,7 @@ class Profiles(db.Model):
     home_address = db.Column(db.String(200), nullable=True)
     home_latitude = db.Column(db.Float, nullable=True)
     home_longitude = db.Column(db.Float, nullable=True)
+    trip_search_radius = db.Column(db.Float, default=0.6)
  
     def __repr__(self):
         return f"<profiles {self.id}>"
