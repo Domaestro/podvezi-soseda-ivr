@@ -16,7 +16,7 @@ def settings():
     user = Users.query.filter(Users.id == current_user.get_id()).first()
     profile = Profiles.query.filter(Profiles.user_id == current_user.get_id()).first()
     return render_template("Settings/settings.html", first_name=user.first_name, second_name=user.second_name, email=user.email,
-        phone=user.phoneNum, description=profile.description, address=profile.home_address, hidden="d-none" if user.confirmed == True else "0")
+        phone=user.phoneNum, description=profile.description, address=profile.home_address, search_radius=profile.trip_search_radius, hidden="d-none" if user.confirmed == True else "0")
 
 
 @settings_module.route('/upload_avatar', methods=["POST", "GET"])
@@ -148,3 +148,19 @@ def address_upload():
     return redirect("/settings")
 
 
+@settings_module.route('/radius_change', methods=["POST", "GET"])
+@login_required
+def radius_change():
+    if request.method == 'POST':
+        radius = float(request.form["radius"])
+        if 0.3 <= radius <= 3.0:
+            try:
+                Profiles.query.filter(Profiles.user_id == current_user.get_id()).first().trip_search_radius = radius
+                db.session.commit()
+                flash("Радиус поиска поездки изменён", "success")
+            except:
+                flash("Ошибка обновления радиуса поиска поездки", "error")
+        else:
+            flash("Некорректный радиус", "error")
+ 
+    return redirect("/settings")

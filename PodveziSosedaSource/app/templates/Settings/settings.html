@@ -239,9 +239,22 @@
                 </form> 
               </div>
             </div>
+
+
+            <!-- nenenenenneneneneneen -->
+            <div class="card-body pb-2">
+              <div class="address_change">
+                <form action="{{ url_for('settings.radius_change') }}" method="POST" class="form-outline" enctype="multipart/form-data">
+                  <div class="form-group">
+                    <label class="form-label">Радиус поиска поездок в режиме пассажира (км)</label>
+                    <input type="number" step=0.1 min="0.3" max="3.0" name="radius" class="form-control mb-1" value="{{ search_radius }}">
+                  </div>       
+                  <input type="submit" class="btn btn-primary btn-primary btn-sm mt-3 mb-4" value="Сохранить">
+                </form> 
+              </div>
+            </div>
     
           </div>
-
 
         </div>
       </div>
