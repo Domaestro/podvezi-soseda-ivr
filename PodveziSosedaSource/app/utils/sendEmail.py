@@ -27,6 +27,7 @@ def send_link(link, to):
             <p style="font-size: smaller; margin-top: 20px"><br><br><br><br>Если вы не регистрировались в "Подвези соседа!" - игнорируйте это письмо</p>
             <p style="font-size: smaller">Письмо сгенерировано автоматически, не отвечайте на него</p>
         </div>
+        <p style="font-size: smaller; margin-top: 20px"><br><br><br><br>Если вы не можете нажать на кнопку, перейдите по ссылке: {domain}{ link }</p>
     </body>
     </html>
     '''
