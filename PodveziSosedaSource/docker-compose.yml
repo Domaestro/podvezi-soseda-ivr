@@ -1,5 +1,16 @@
 version: "3.3"
 services:
+  podvezi:
+    build: ./
+    command: "gunicorn manage:app -b :8080"
+    networks:
+      podvezi-network:
+        ipv4_address: 172.74.0.11
+    ports:
+      - 8080:8080
+    env_file:
+      - ./.env_var
+
   postgres:
     image: postgres:13.7
     environment:
@@ -8,5 +19,13 @@ services:
       POSTGRES_PASSWORD: ""
     volumes:
       - ../../DOCKER_VOLUMES/postgres:/docker-entrypoint-initdb.d
+    networks:
+      podvezi-network:
+        ipv4_address: 172.74.0.22
+    
     ports:
       - "5435:5432"
+
+networks:
+  podvezi-network:
+    external: true
