@@ -33,3 +33,7 @@ PodveziSosedaSource/migrations/
 PodveziSosedaSource/migrations/*
 PodveziSosedaSource/env/
 PodveziSosedaSource/env/*
+
+PodveziSosedaSource/Dockerfile
+PodveziSosedaSource/docker-compose.yml
+PodveziSosedaSource/env_var
