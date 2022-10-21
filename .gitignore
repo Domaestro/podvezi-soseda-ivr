@@ -37,3 +37,5 @@ PodveziSosedaSource/env/*
 PodveziSosedaSource/Dockerfile
 PodveziSosedaSource/docker-compose.yml
 PodveziSosedaSource/.env_var
+
+PodveziSosedaSource/deploy/set-env.sh
