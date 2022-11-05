@@ -1,0 +1,18 @@
+.success {
+    background-color: rgb(56, 167, 56);
+}
+
+.error {
+    background-color: rgb(204, 59, 59);
+}
+
+.trip_type {
+    display: none;
+}
+
+/* На большом экране*/
+@media (min-width: 767px) {
+    .trip_type {
+        display:inline;
+    }
+}

@@ -48,7 +48,8 @@ def join():
                     "passengers": {
                         id: Users.query.filter(Users.id==id).first().first_name for id in trp.passengers_ids
                     },
-                    "description": trp.description
+                    "description": trp.description,
+                    "joined": int(current_user.get_id()) in trp.passengers_ids
                 }
                 valid_trips.append(vtrip)
 
@@ -60,20 +61,39 @@ def join():
         print(valid_trips[POSTS_ON_PAGE*req['next_page']-POSTS_ON_PAGE+1:POSTS_ON_PAGE*req['next_page']])                            
         return resp
 
-    return render_template("Passenger/join.html", trips=valid_trips[0:POSTS_ON_PAGE])
+    return render_template("Passenger/join.html", trips=valid_trips) # trips=valid_trips[0:POSTS_ON_PAGE]
 
 
 @passenger.route("/<trip_id>", methods=["GET", "POST"])
 @login_required
 def join_trip(trip_id):
     trip = Trips.query.filter(Trips.trip_id==trip_id).first()
-    print(trip.passengers_ids, current_user.get_id())
-    if current_user.get_id() in trip.passengers_ids:
-        flash("Вы уже присоединилсь к этой поездке", "error")
+    if int(current_user.get_id()) in trip.passengers_ids:
+        flash("Вы уже присоединились к этой поездке ранее", "error")
+    elif len(trip.passengers_ids) >= trip.max_passengers_amount:
+        flash("К поездке уже присоединилось максимальное количество пассажиров", "error")
     else:
         try:
             trip.passengers_ids = [*trip.passengers_ids, current_user.get_id()]
             flash("Вы успешно присоединились к поездке", "success")
+            db.session.flush()
+            db.session.commit()
+        except:
+            flash("Произошла ошибка", "error")
+            db.session.rollback()
+    return redirect(url_for("passenger.join"))
+
+
+@passenger.route("/discard/<trip_id>", methods=["GET", "POST"])
+@login_required
+def discard_trip(trip_id):
+    trip = Trips.query.filter(Trips.trip_id==trip_id).first()
+    if int(current_user.get_id()) not in trip.passengers_ids:
+        flash("Вы не присоединялись к этой поездке", "error")
+    else:
+        try:
+            trip.passengers_ids = [int(i) for i in trip.passengers_ids if i != int(current_user.get_id())]
+            flash("Вы успешно исключены из участников поездки", "success")
             db.session.flush()
             db.session.commit()
         except:

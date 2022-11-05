@@ -1,26 +1,7 @@
 {% extends 'base.html' %}
 
 {% block css_style %}
-<style>
-    .success {
-    background-color: rgb(56, 167, 56);
-    }
-
-    .error {
-        background-color: rgb(204, 59, 59);
-    }
-
-    .trip_type {
-        display: none;
-    }
-
-    /* На большом экране*/
-    @media (min-width: 767px) {
-        .trip_type {
-            display:inline;
-        }
-    }
-</style>
+    <link href="{{ url_for('static', filename='css/passenger.css')}}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -67,7 +48,33 @@
                                     {{ trip["description"] }}
                                 </p>
                                 <div class="text-end">
-                                    <a href="{{ url_for('passenger.join_trip', trip_id = trip['trip_id']) }}" class="btn btn-primary mx-2 shadow-none pbutton"> <i class="material-icons but-icon">waving_hand</i>Присоединиться</a>
+                                    {% if trip["joined"] %}
+                                        <!-- Button trigger modal -->
+                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalN{{ trip['trip_id'] }}">
+                                            <i class="material-icons but-icon">done</i>Вы присоединились
+                                        </button>
+                                        
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="ModalN{{ trip['trip_id'] }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Выполните действие</h5>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Отказаться от поездки?
+                                                </div>
+                                                <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                                                <a href="{{ url_for('passenger.discard_trip', trip_id = trip['trip_id']) }}" class="btn btn-danger mx-2 shadow-none pbutton">Отказаться от поездки</a>
+                                                </div>
+                                            </div>
+                                            </div>
+                                        </div>
+  
+                                    {% else %}
+                                        <a href="{{ url_for('passenger.join_trip', trip_id = trip['trip_id']) }}" class="btn btn-primary mx-2 shadow-none pbutton"> <i class="material-icons but-icon">waving_hand</i>Присоединиться</a>
+                                    {% endif %}
                                 </div>
                                 
                             </div>
@@ -76,7 +83,7 @@
                 {% endfor %}
             </div>
 
-            <div style="max-width: 1000px;">
+            <!-- <div style="max-width: 1000px;">
                 <div class="text-center mt-5">
                     <button id="lmbtn" class="btn btn-secondary shadow-none btn-lg" onclick="load_more()">
                         <span id="spinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" hidden></span>
@@ -84,7 +91,7 @@
                     </button>
                     <p id = "endhistory" class="text-muted mt-3 mb-3" hidden>Это все ваши поездки</p>
                 </div>
-            </div>
+            </div> -->
         {% else %}
             <h3 class="text-muted mt-3 mb-3">Нет поездок рядом</h3>
         {% endif %}
@@ -95,7 +102,7 @@
 
 {% block script %}
     <!-- Бесконечный скролл -->
-    <script>
+    <!-- <script>
         let page_status = {
             next_page: 2
         }
@@ -163,7 +170,7 @@
             }
 
         }
-    </script>
+    </script> -->
 
     <!-- Блок скрипта для выделения иконки в меню -->
     <script>    
