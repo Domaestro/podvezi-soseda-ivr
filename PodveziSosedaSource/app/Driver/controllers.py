@@ -16,6 +16,7 @@ driver = Blueprint('driver', __name__, url_prefix ='/drive')
 @confirm_required
 @login_required
 def drive():
+    '''Страница водителя'''
     first_2_actual_trips = Trips.query.filter(Trips.driver_id == current_user.get_id(), Trips.trip_date>=datetime.now().date()) \
                                 .order_by(Trips.trip_date).limit(2).all()
     days_possible=["Сегодня", "Завтра", "Послезавтра"]
@@ -31,7 +32,7 @@ def drive():
 @confirm_required
 @login_required
 def setup_drive():
-
+    '''Страница для создания новой поездки'''
     # Проверка заполненности профиля у пользователя
     profile = Profiles.query.filter(Profiles.user_id == current_user.get_id()).first()
     if not profile.home_address:
@@ -93,7 +94,7 @@ def setup_drive():
             flash("Запрещено создавать больше трех поездок на один день", "error")
             return redirect(url_for("driver.drive"))
 
-        # Проверка этой новой поездки на схожесть с уже существующими (Привет Купцов)
+        # Проверка этой новой поездки на схожесть с уже существующими
         same_date_trips = Trips.query.filter(Trips.trip_date==trip_date).all()
         for trp in same_date_trips:
             if gd_distance( (trp.from_latitude, trp.from_longitude ), (from_lati, from_long) ) < 0.6 and \
@@ -157,6 +158,7 @@ def setup_drive():
 @confirm_required
 @login_required
 def maps():
+    '''Страница с картой'''
     return render_template("Driver/maps.html")
 
 
@@ -277,6 +279,7 @@ def create_trip_by_force():
 @confirm_required
 @login_required
 def active_trips():
+    '''Список предстоящих поездок'''
     actual_trips = Trips.query.filter(Trips.driver_id == current_user.get_id(), Trips.trip_date>=datetime.now().date()) \
                                 .order_by(Trips.trip_date).all()
     days_possible = ["Сегодня", "Завтра", "Послезавтра"]
@@ -287,6 +290,7 @@ def active_trips():
 @driver.route("/trip/<trip_id>", methods=["GET"])
 @login_required
 def trip(trip_id):
+    '''Отдельная поездка'''
     trip = Trips.query.filter(Trips.driver_id == current_user.get_id(), Trips.trip_id==trip_id) \
                 .first_or_404()
 
@@ -310,7 +314,8 @@ def trip(trip_id):
 
 @driver.route("/trip/change/<trip_id>", methods=["GET", "POST"])
 @login_required
-def change(trip_id):    
+def change(trip_id):
+    '''Изменение информации о поездке'''
     trip = Trips.query.filter(Trips.driver_id == current_user.get_id(), Trips.trip_id==trip_id, Trips.trip_date>=datetime.now().date()) \
                 .first_or_404()
 
@@ -342,6 +347,8 @@ def change(trip_id):
 @confirm_required
 @login_required
 def history():
+    '''История поездок'''
+
     # Пагинация (бесконечный скролл)
     POSTS_ON_PAGE = 3
 

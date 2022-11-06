@@ -11,6 +11,7 @@ confirmEmail = Blueprint('confirmEmail', __name__, url_prefix ='/confirm_email')
 
 @confirmEmail.route('/<token>')
 def confirm_email(token):
+    '''Подтверждение адреса email по токену'''
     try:
         user_id = Email_Confirm_Tokens.query.filter(token==token).all()[-1].user_id
         user_email = Users.query.filter(Users.id == user_id).first().email
@@ -36,6 +37,7 @@ def confirm_email(token):
 
 @confirmEmail.route('/letter')
 def confirm_letter():
+    '''Информация об отправке письма на почту'''
     email = Users.query.filter(Users.id == current_user.get_id()).first().email
     return render_template("Confirm_Email/confirm_email_letter.html", email=email) #'Вам на почту отправлена ссылка, перейдите по ней, чтобы подтвердить свой адрес электронной почты'
 
@@ -45,4 +47,5 @@ def confirm_letter():
 @confirm_required
 @login_required
 def send_confirm():
+    '''Ссылка в настройки'''
     return redirect(url_for('settings'))

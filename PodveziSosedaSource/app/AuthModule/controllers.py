@@ -24,6 +24,7 @@ auth = Blueprint('auth', __name__, url_prefix ='/auth')
 
 @auth.route("/register", methods=("POST", "GET"))
 def register():
+    '''Регистрация нового пользователя'''
     # Если пользователь уже вошел, он идет в свой профиль
     if current_user.is_authenticated:
         return redirect("/profile")
@@ -69,6 +70,7 @@ def register():
 
 @auth.route("/login", methods=["POST", "GET"])
 def login():
+    '''Логин пользователя'''
     # Если пользователь уже вошел, он идет в свой профиль
     if current_user.is_authenticated:
         return redirect("/profile")
@@ -89,6 +91,7 @@ def login():
 @auth.route('/logout')
 @login_required
 def logout():
+    '''Выход из аккаунта'''
     logout_user()
     flash("Вы вышли из аккаунта", "success")
     return redirect(url_for('.login'))

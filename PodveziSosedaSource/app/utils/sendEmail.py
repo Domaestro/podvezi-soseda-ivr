@@ -5,6 +5,9 @@ import smtplib, ssl
 from config import Config
 
 def send_link(link, to):
+    '''Функция для отправки письма с 
+    просьбой подтвердить адрес электронной почты'''
+
     msg = MIMEMultipart()
 
     domain = Config.domain

@@ -15,6 +15,10 @@ import app.Passenger.controllers as passengerModule
 
 
 def create_app():
+    '''Основная функция по инициализации всего приложения,
+    осуществляет подключение к базе данных и регистрирует
+    все модули основного функционала веб-приложения'''
+
     app = Flask(__name__)
     app.config.from_object(os.environ['APP_SETTINGS'])
 

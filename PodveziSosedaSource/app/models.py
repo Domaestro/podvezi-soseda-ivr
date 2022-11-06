@@ -2,6 +2,7 @@ from .database import db
 
 
 class Users(db.Model):
+    '''Таблица в бд, содержащая информацию о пользователях'''
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True) # Уникальный id
     email = db.Column(db.String(50), unique=True) # Почта пользователя максимальной длиной 50 символов, должна быть уникальной
@@ -16,6 +17,7 @@ class Users(db.Model):
 
 
 class Profiles(db.Model):
+    '''Таблица в бд, содержащая информацию о профилях пользователей'''
     __tablename__ = 'profiles'
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     id = db.Column(db.Integer, primary_key=True)
@@ -31,6 +33,7 @@ class Profiles(db.Model):
 
 
 class Trips(db.Model):
+    '''Таблица в бд, содержащая информацию о созданных поездках'''
     __tablename__ = 'trips'
     trip_id = db.Column(db.Integer, primary_key=True)
     driver_id = db.Column(db.Integer)
@@ -51,6 +54,8 @@ class Trips(db.Model):
     description = db.Column(db.Text, nullable=True)
 
 class Email_Confirm_Tokens(db.Model):
+    '''Таблица в бд, содержащая информацию о 
+    токенах, отправленных по электронной почте'''
     __tablename__ = 'email_confirm_tokens'
     token_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer)

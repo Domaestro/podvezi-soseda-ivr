@@ -17,6 +17,7 @@ passenger = Blueprint('passenger', __name__, url_prefix ='/join')
 @confirm_required
 @login_required
 def join():
+    '''Страница пассажира'''
     # Пагинация (бесконечный скролл)
     POSTS_ON_PAGE = 3
 
@@ -67,6 +68,7 @@ def join():
 @passenger.route("/<trip_id>", methods=["GET", "POST"])
 @login_required
 def join_trip(trip_id):
+    '''Присоединение к поездке'''
     trip = Trips.query.filter(Trips.trip_id==trip_id).first()
     if int(current_user.get_id()) in trip.passengers_ids:
         flash("Вы уже присоединились к этой поездке ранее", "error")
@@ -87,6 +89,7 @@ def join_trip(trip_id):
 @passenger.route("/discard/<trip_id>", methods=["GET", "POST"])
 @login_required
 def discard_trip(trip_id):
+    '''Отказ от участия в поездке'''
     trip = Trips.query.filter(Trips.trip_id==trip_id).first()
     if int(current_user.get_id()) not in trip.passengers_ids:
         flash("Вы не присоединялись к этой поездке", "error")

@@ -9,16 +9,20 @@ from .models import Users, Profiles, Trips, Email_Confirm_Tokens
 
 
 class AdminModelView(ModelView):
+    '''Конфигурация админ-панели'''
     column_display_pk = True
+    # У кого есть доступ к админ-панели
     def is_accessible(self):
         user = Users.query.filter(Users.id == current_user.get_id()).first()
         return user.email==Config.admin_login
-
+    
     def inaccessible_callback(self, name, **kwargs):
         return redirect(url_for('auth.login', next=request.url))
 
 
 class AdminIndex(AdminIndexView):
+    '''Конфигурация админ-панели'''
+    # У кого есть доступ к главной странице админки
     def is_accessible(self):
         user = Users.query.filter(Users.id == current_user.get_id()).first()
         return user.email==Config.admin_login

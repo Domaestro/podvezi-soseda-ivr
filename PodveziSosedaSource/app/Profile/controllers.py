@@ -14,6 +14,7 @@ profiles = Blueprint('profiles', __name__, url_prefix ='/profile')
 @confirm_required
 @login_required
 def profile():
+    '''Профиль пользователя'''
     user = Users.query.filter(Users.id == current_user.get_id()).first()
     profile = Profiles.query.filter(Profiles.user_id == current_user.get_id()).first()
     return render_template("Profile/profile.html", id=current_user.get_id(), name =f"{user.first_name} {user.second_name}", description=profile.description, email=user.email, 
@@ -23,6 +24,7 @@ def profile():
 @profiles.route('/load_avatar')
 @login_required
 def load_avatar():
+    '''Выгрузка аватара из бд'''
     profile = Profiles.query.filter(Profiles.user_id == current_user.get_id()).first()
 
     img = None
@@ -46,6 +48,7 @@ def load_avatar():
 @profiles.route("/<user_id>")
 @login_required
 def user(user_id):
+    '''Профиль внешнего пользователя'''
     user = Users.query.filter(Users.id == user_id).first_or_404()
     profile = Profiles.query.filter(Profiles.user_id == user_id).first_or_404()
     return render_template("Profile/user.html", id=user_id, name =f"{user.first_name} {user.second_name}", description=profile.description, email=user.email, 
@@ -55,6 +58,7 @@ def user(user_id):
 @profiles.route('/load_user_avatar/<user_id>')
 @login_required
 def load_user_avatar(user_id):
+    '''Выгрузка аватара из бд'''
     profile = Profiles.query.filter(Profiles.user_id == user_id).first_or_404()
 
     img = None

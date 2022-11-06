@@ -13,6 +13,7 @@ settings_module = Blueprint('settings', __name__, url_prefix ='/settings')
 @settings_module.route("/", methods=["POST", "GET"])
 @login_required
 def settings():
+    '''Настройки'''
     user = Users.query.filter(Users.id == current_user.get_id()).first()
     profile = Profiles.query.filter(Profiles.user_id == current_user.get_id()).first()
     return render_template("Settings/settings.html", first_name=user.first_name, second_name=user.second_name, email=user.email,
@@ -22,6 +23,7 @@ def settings():
 @settings_module.route('/upload_avatar', methods=["POST", "GET"])
 @login_required
 def upload():
+    '''Загрузка аватара'''
     if request.method == 'POST':
         file = request.files['file']
         if file and current_user.verifyExt(file.filename):
@@ -42,9 +44,10 @@ def upload():
 @settings_module.route('/upload_new_password', methods=["POST", "GET"])
 @login_required
 def upload_new_password():
+    '''Изменение пароля'''
     user = Users.query.filter(Users.id == current_user.get_id()).first()
     if request.method == 'POST':
-        if len(request.form['new_psw']) > 3: # Нужно сделать нормальную проверку пароля наконец
+        if len(request.form['new_psw']) > 4:
             if check_password_hash(user.psw, request.form['old_psw']): 
                 try:
                     hash = generate_password_hash(request.form['new_psw'])
@@ -64,6 +67,7 @@ def upload_new_password():
 @settings_module.route('/upload_basic_info', methods=["POST", "GET"])
 @login_required
 def upload_basic_info():
+    '''Загрузка и обновление информации из профиля'''
     u = Users.query.filter(Users.id == current_user.get_id()).first()
 
     if request.method == 'POST':
@@ -91,6 +95,7 @@ def upload_basic_info():
 @settings_module.route('/upload_description', methods=["POST", "GET"])
 @login_required
 def upload_desc():
+    '''Загрузка описания профиля'''
     if request.method == 'POST':
         desc = request.form["desc"]
         if len(desc) <= 600:
@@ -109,6 +114,7 @@ def upload_desc():
 @settings_module.route('/address/confirm', methods=["POST", "GET"])
 @login_required
 def address_confirm():
+    '''Подтверждение гео. адреса'''
     if request.method == 'POST':
         place = request.form["place"]
         #location = get_geocode_gv3(place) # определить адрес, используя Google
@@ -125,6 +131,7 @@ def address_confirm():
 @settings_module.route('/address/upload', methods=["POST", "GET"])
 @login_required
 def address_upload():
+    '''Загрузка гео. адреса'''
     if request.method == 'POST':
         place = session["place"]
         #location = get_geocode_gv3(place) # определить адрес, используя Google
@@ -143,7 +150,7 @@ def address_upload():
 
             return redirect("/settings")
         else:
-            flash("Вы ввели несуществующий адрес", "error")
+            flash("Вы ввели несуществующий адрес, попробуйте указать его точнее", "error")
  
     return redirect("/settings")
 
@@ -151,6 +158,7 @@ def address_upload():
 @settings_module.route('/radius_change', methods=["POST", "GET"])
 @login_required
 def radius_change():
+    '''Изменение радиуса поиска поездки'''
     if request.method == 'POST':
         radius = float(request.form["radius"])
         if 0.3 <= radius <= 3.0:

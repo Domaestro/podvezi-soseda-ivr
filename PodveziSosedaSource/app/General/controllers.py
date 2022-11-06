@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, send_from_directory, make_response
+from flask import Blueprint, render_template, send_from_directory, make_response, redirect, url_for
 from flask_login import login_required
 
 from app.utils.utils import confirm_required
@@ -12,12 +12,13 @@ general = Blueprint('general', __name__)
 @confirm_required
 @login_required
 def index():
-    return render_template("index.html")
+    '''Перенаправление в профиль'''
+    return redirect(url_for('profiles.profile'))
 
 
-# Страница 404
 @general.app_errorhandler(404)
 def page_not_found(e):
+    '''Страница 404'''
     return render_template('Errors/404.html'), 404
 
 

@@ -8,7 +8,7 @@ gv3 = GoogleV3(api_key=Config.api_key, domain='maps.google.ru')
 
 
 def get_geocode_gv3(usplace):
-    '''Геокодер корпорации зла Google, предпочтительно не использовать, но работает иногда лучше'''
+    '''Геокодер корпорации зла Google, возвращает географические координаты объекта по его адресу'''
     try:
         return gv3.geocode(usplace)
     except:
@@ -16,7 +16,7 @@ def get_geocode_gv3(usplace):
 
 
 def get_geocode_osm(usplace):
-    '''Геокодер osm, использовать в первую очередь'''
+    '''Геокодер osm, возвращает географические координаты объекта по его адресу'''
     try:
         return nom.geocode(usplace)
     except:
